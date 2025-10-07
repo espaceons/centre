@@ -1,0 +1,14 @@
+{% extends 'base.html' %} {% block title %}
+  Confirmer la Suppression
+{% endblock %} {% block content %}
+  <div class="alert alert-danger shadow-sm" role="alert">
+    <h4 class="alert-heading"><i class="fas fa-exclamation-triangle me-2"></i> Confirmer la Suppression</h4>
+    <p>Êtes-vous sûr de vouloir supprimer l'entreprise **{{ object.nom }}** ? Cette action est irréversible.</p>
+    <hr />
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt me-1"></i> Oui, Supprimer</button>
+      <a href="{% url 'entreprise:detail_entreprise' object.pk %}" class="btn btn-secondary ms-2">Annuler</a>
+    </form>
+  </div>
+{% endblock %}

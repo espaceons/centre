@@ -1,0 +1,20 @@
+{% extends 'base.html' %} {% block title %}
+  Ajouter/Modifier une Personnel
+{% endblock %} {% block content %}
+  {% if object %}
+    <h1 class="h3 text-primary"><i class="fas fa-edit me-2"></i> Modifier Personnel : {{ object.nom }}</h1>
+  {% else %}
+    <h1 class="h3 text-primary"><i class="fas fa-plus-circle me-2"></i> Ajouter une Nouvelle Personnel</h1>
+  {% endif %}
+
+  <div class="card shadow-sm mt-4">
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %} {{ form.as_p }}
+
+        <button type="submit" class="btn btn-primary mt-3"><i class="fas fa-save me-1"></i> Enregistrer</button>
+        <a href="{% url 'personnel:liste_personnels' %}" class="btn btn-secondary mt-3 ms-2">Annuler</a>
+      </form>
+    </div>
+  </div>
+{% endblock %}

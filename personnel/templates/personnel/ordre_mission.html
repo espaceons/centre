@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Ordre de Mission pour {{ visite.personnel.nom }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+      /* Styles spécifiques à l'impression */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 30px;
+      }
+      @media print {
+        .no-print {
+          display: none !important;
+        }
+      }
+      .mission-header {
+        border-bottom: 2px solid #000;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="text-center mission-header">
+        <h2>ORDRE DE MISSION</h2>
+        <p>Centre de Formation</p>
+      </div>
+
+      <h4 class="mb-4">Détails du Personnel</h4>
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <p>
+            <strong>Nom et Prénom :</strong> {{ visite.personnel.prenom }} {{ visite.personnel.nom }}
+          </p>
+        </div>
+        <div class="col-md-6">
+          <p>
+            <strong>Fonction :</strong> {{ visite.personnel.fonction }}
+          </p>
+        </div>
+      </div>
+
+      <h4 class="mb-4">Détails de la Visite</h4>
+      <table class="table table-bordered mb-5">
+        <tbody>
+          <tr>
+            <td style="width: 30%;">
+              <strong>Entreprise Cible :</strong>
+            </td>
+            <td>{{ visite.entreprise.nom }}</td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Adresse :</strong>
+            </td>
+            <td>{{ visite.entreprise.adresse }}</td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Date de la Mission :</strong>
+            </td>
+            <td>{{ visite.date_visite|date:'d F Y' }}</td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Objet de la Mission :</strong>
+            </td>
+            <td>{{ visite.objet }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4 class="mb-4">Instructions Spécifiques</h4>
+      <div style="border: 1px solid #ccc; padding: 15px; min-height: 100px;">
+        <p>Le personnel est autorisé à représenter l'établissement pour les démarches liées à l'objet de la mission.</p>
+        <p>Veuillez remplir le rapport de visite dès votre retour.</p>
+      </div>
+
+      <div class="row mt-5">
+        <div class="col-6">
+          <p>Fait à : __________________</p>
+          <p>Le : {{ 'now'|date:'d F Y' }}</p>
+        </div>
+        <div class="col-6 text-end">
+          <p>Signature du Directeur :</p>
+          <br /><br /><br />
+          <p>__________________________</p>
+        </div>
+      </div>
+
+      <div class="text-center mt-5 no-print">
+        <button class="btn btn-primary" onclick="window.print()">Imprimer l'Ordre de Mission</button>
+        <a href="{% url 'personnel:detail_personnel' pk=visite.personnel.pk %}" class="btn btn-secondary ms-2 no-print">Retour à la Fiche Personnel</a>
+      </div>
+    </div>
+  </body>
+</html>

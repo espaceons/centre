@@ -1,0 +1,85 @@
+{% extends 'base.html' %} {% block title %}
+  Détail de {{ personnel.prenom }} {{ personnel.nom }}
+{% endblock %} {% block content %}
+  <h1 class="h3 text-success"><i class="fas fa-user me-2"></i> {{ personnel.prenom }} {{ personnel.nom }}</h1>
+
+  <div class="card shadow-sm mt-4">
+    <div class="card-header bg-success text-white">Informations Générales</div>
+    <div class="card-body">
+      <p>
+        <strong>Fonction :</strong> {{ personnel.fonction }}
+      </p>
+      <p>
+        <strong>Date d'Embauche :</strong> {{ personnel.date_embauche|date:'d F Y' }}
+      </p>
+    </div>
+    <div class="card-footer d-flex justify-content-end">
+      <a href="{% url 'personnel:modifier_personnel' personnel.pk %}" class="btn btn-warning me-2"><i class="fas fa-edit me-1"></i> Modifier le Personnel</a>
+    </div>
+  </div>
+
+  <h2 class="mt-5 mb-3 text-secondary">Historique des Visites</h2>
+
+  <a href="{% url 'personnel:ajouter_visite_pour_personnel' personnel.pk %}" class="btn btn-primary mb-3"><i class="fas fa-calendar-plus me-1"></i> Planifier une Nouvelle Visite</a>
+
+  {% if personnel.visite_set.all %}
+    <div class="table-responsive">
+      <table class="table table-striped align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Date</th>
+            <th>Entreprise</th>
+            <th>Objet</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for visite in personnel.visite_set.all %}
+            <tr>
+              <td>{{ visite.date_visite|date:'d/m/Y' }}</td>
+              <td>
+                <a href="{% url 'entreprise:detail_entreprise' visite.entreprise.pk %}">{{ visite.entreprise.nom }}</a>
+              </td>
+              <td>{{ visite.objet }}</td>
+              <td>
+                <button class="btn btn-sm btn-info text-white me-2" title="Voir Rapport" data-bs-toggle="modal" data-bs-target="#rapportModal{{ visite.pk }}"><i class="fas fa-file-alt"></i> Rapport</button>
+
+                <a href="{% url 'personnel:ordre_mission' pk=visite.pk %}" class="btn btn-sm btn-secondary me-2" title="Générer Ordre de Mission" target="_blank"><i class="fas fa-print"></i> Ordre</a>
+
+                <a href="{% url 'personnel:modifier_visite' pk=visite.pk %}" class="btn btn-sm btn-warning me-2" title="Modifier"><i class="fas fa-edit"></i> Modifier</a>
+                <a href="{% url 'personnel:supprimer_visite' pk=visite.pk %}" class="btn btn-sm btn-danger" title="Supprimer"><i class="fas fa-trash-alt"></i> Supprimer</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-info">Ce membre du personnel n'a pas encore de visites enregistrées.</div>
+  {% endif %} {% for visite in personnel.visite_set.all %}
+    <div class="modal fade" id="rapportModal{{ visite.pk }}" tabindex="-1" aria-labelledby="rapportModalLabel{{ visite.pk }}" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header bg-info text-white">
+            <h5 class="modal-title" id="rapportModalLabel{{ visite.pk }}">Rapport de Visite : {{ visite.entreprise.nom }}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>
+              <strong>Date :</strong> {{ visite.date_visite|date:'d/m/Y' }}
+            </p>
+            <p>
+              <strong>Objet :</strong> {{ visite.objet }}
+            </p>
+            <hr />
+            <h6>Contenu du Rapport :</h6>
+            <p>{{ visite.rapport|default:'Aucun rapport détaillé fourni.' }}</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+{% endblock %}

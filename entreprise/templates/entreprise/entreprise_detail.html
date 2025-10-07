@@ -1,0 +1,23 @@
+{% extends 'base.html' %} {% block title %}
+  Détail de {{ entreprise.nom }}
+{% endblock %} {% block content %}
+  <h1 class="h3 text-primary"><i class="fas fa-info-circle me-2"></i> Détails de l'Entreprise</h1>
+
+  <div class="card shadow-sm mt-4">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">{{ entreprise.nom }}</h5>
+    </div>
+    <div class="card-body">
+      <p>
+        <strong>Secteur d'Activité :</strong> {{ entreprise.secteur_activite }}
+      </p>
+      <p>
+        <strong>Adresse :</strong> {{ entreprise.adresse }}
+      </p>
+    </div>
+    <div class="card-footer d-flex justify-content-end">
+      <a href="{% url 'entreprise:modifier_entreprise' entreprise.pk %}" class="btn btn-warning me-2"><i class="fas fa-edit me-1"></i> Modifier</a>
+      <a href="{% url 'entreprise:liste_entreprises' %}" class="btn btn-secondary"><i class="fas fa-list me-1"></i> Retour à la liste</a>
+    </div>
+  </div>
+{% endblock %}
