@@ -1,17 +1,18 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="ar" dir="rtl">
   <head>
     <meta charset="utf-8" />
-    <title>Ordre de Mission pour {{ visite.personnel.nom }}</title>
+    <title>إذن بمؤمورية</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
     <style>
       /* Styles spécifiques à l'impression */
       body {
-        font-family: Arial, sans-serif;
+        font-family: 'Arial', sans-serif; /* Conservez une police lisible */
         margin: 30px;
+        text-align: right; /* Aligner le texte par défaut à droite */
       }
       @media print {
         /* Masque les boutons d'action lors de l'impression */
@@ -27,104 +28,141 @@
         padding-bottom: 10px;
         margin-bottom: 20px;
       }
+      /* Correction pour le bouton imprimé pour RTL */
+      .no-print .ms-2 {
+        margin-left: 0 !important;
+        margin-right: 0.5rem !important;
+      }
     </style>
   </head>
   <body>
     <div class="container">
       <div class="mission-header border-bottom border-dark pb-3 mb-4">
         <div class="row align-items-start">
-          <div class="col-6 text-start d-flex align-items-center">
-            <div style="height: 200px; width: 200px; margin-right: 15px; flex-shrink: 0;">
-              <img src="{% static 'images/logo_ATFP_gauche.jpg' %}" alt="Logo du Ministère" style="max-width: 100%; height: auto;" />
+          <div class="col-3 text-end">
+            <div style="width: 200px; height: auto; margin-right: auto; margin-left: 0;">
+              <img src="{% static 'images/logod_ATFP.png' %}" alt="Logo Droit" style="max-width: 100%; height: auto;" />
             </div>
-
-            {% comment %} <div class="text-start flex-grow-1">
-              <p class="mb-0 fw-bold">الجمهورية التونسية</p>
-              <p class="mb-0">الوكالة التونسية للتكوين المهني</p>
-              <p class="mb-0">DIRECTION GÉNÉRALE</p>
-            </div> {% endcomment %}
           </div>
 
-          {% comment %} <div class="col-6 text-end">
-            <p class="mb-0 fw-bold">CENTRE DE FORMATION</p>
-            <p class="mb-0">Service des Missions</p>
-          </div> {% endcomment %}
+          <div class="col-6 text-center">
+            {% comment %} <p class="mb-0 fw-bold">الجمهورية التونسية</p>
+            <p class="mb-0">الوكالة التونسية للتكوين المهني</p>
+            <p class="mb-0">الإدارة العامة</p> {% endcomment %}
+          </div>
 
-          <div class="col-6 text-end"></div>
+          <div class="col-3 text-start">
+            <div style="width: 100px; height: auto;">
+              <img src="{% static 'images/logo_ATFP_gauche.jpg' %}" alt="Logo Gauche" style="max-width: 100%; height: auto;" />
+            </div>
+          </div>
         </div>
 
         <div class="row mt-3">
           <div class="col-12 text-center">
-            <h2 class="fw-bolder text-decoration-underline text-uppercase">إذن بمؤمورية (ORDRE DE MISSION)</h2>
+            <h2 class="fw-bolder text-uppercase text-decoration-underline">إذن بمؤمورية</h2>
           </div>
         </div>
       </div>
-      <h4 class="mb-4 text-primary">Détails du Personnel</h4>
+
+      <h4 class="mb-4 text-primary">تفاصيل الموظف</h4>
       <div class="row mb-4 border p-3 rounded">
         <div class="col-md-6">
           <p>
-            <strong>Nom et Prénom :</strong> {{ visite.personnel.prenom }} {{ visite.personnel.nom }}
+            <strong>الســــيد(ة) :</strong> {{ visite.personnel.prenom }} {{ visite.personnel.nom }}
+          </p>
+          <p>
+            <strong>الخــطة:</strong> {{ visite.personnel.prenom }} {{ visite.personnel.nom }}
+          </p>
+          <p>
+            <strong>مطلب بالتوجه إلى:</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ visite.entreprise.nom }}
+          </p>
+          <p>
+            <strong>السبـــب:</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ visite.objet }}
+          </p>
+          <p>
+            <strong>وسيلة النقل :</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ visite.personnel.fonction }}
+          </p>
+          <p>
+            <strong>طبيعة المؤمورية :</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ visite.personnel.fonction }}
+          </p>
+          <p>
+            <strong>تحمل الوكالة لنفقات الإقامة :</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; لا
+          </p>
+          <p>
+            <strong>الذهاب من :</strong>&nbsp;&nbsp;&nbsp;طبــلــبة &nbsp;&nbsp;&nbsp;
+            <strong>يوم :</strong> الإثنين &nbsp;&nbsp;&nbsp; {{ visite.date_visite|date:'d F Y' }} &nbsp;&nbsp;&nbsp; على الســـاعة : 08:00
+          </p>
+          <p>
+            &nbsp;
+            <strong>العـــودة :</strong>
+            &nbsp;&nbsp;&nbsp;
+            <strong>يوم :</strong> الإثنين &nbsp;&nbsp;&nbsp; {{ visite.date_visite|date:'d F Y' }} &nbsp;&nbsp;&nbsp; على الســـاعة : 10:00
           </p>
         </div>
+
         <div class="col-md-6">
           <p>
-            <strong>Fonction :</strong> {{ visite.personnel.fonction }}
+            <strong>المــعرف الوحيــد :</strong> {{ visite.personnel.prenom }} {{ visite.personnel.nom }}
+          </p>
+          <p>
+            <strong>الصــنف :</strong> {{ visite.personnel.fonction }}
           </p>
         </div>
       </div>
 
-      <h4 class="mb-4 text-primary">Détails de la Visite</h4>
+      <h4 class="mb-4 text-primary">تفاصيل الزيارة</h4>
       <table class="table table-bordered mb-5">
         <tbody>
           <tr>
             <td style="width: 30%;" class="bg-light">
-              <strong>Entreprise Cible :</strong>
+              <strong>الشركة المستهدفة :</strong>
             </td>
             <td>{{ visite.entreprise.nom }}</td>
           </tr>
           <tr>
             <td class="bg-light">
-              <strong>Adresse :</strong>
+              <strong>العنوان :</strong>
             </td>
             <td>{{ visite.entreprise.adresse }}</td>
           </tr>
           <tr>
             <td class="bg-light">
-              <strong>Date de la Mission :</strong>
+              <strong>تاريخ المهمة :</strong>
             </td>
             <td>{{ visite.date_visite|date:'d F Y' }}</td>
           </tr>
           <tr>
             <td class="bg-light">
-              <strong>Objet de la Mission :</strong>
+              <strong>موضوع المهمة :</strong>
             </td>
             <td>{{ visite.objet }}</td>
           </tr>
         </tbody>
       </table>
 
-      <h4 class="mb-4 text-primary">Instructions Spécifiques</h4>
+      <h4 class="mb-4 text-primary">تعليمات خاصة</h4>
       <div style="border: 1px solid #ccc; padding: 15px; min-height: 100px; background-color: #f8f9fa;">
-        <p>Le personnel est autorisé à représenter l'établissement pour les démarches liées à l'objet de la mission.</p>
-        <p>Veuillez remplir le rapport de visite dès votre retour.</p>
+        <p>يسمح للموظف بتمثيل المؤسسة في الإجراءات المتعلقة بموضوع المهمة.</p>
+        <p>يرجى ملء تقرير الزيارة فور العودة.</p>
       </div>
 
       <div class="row mt-5">
-        <div class="col-6">
-          <p>Fait à : __________________</p>
-          <p>Le : **{{ 'now'|date:'d F Y' }}**</p>
-        </div>
         <div class="col-6 text-end">
-          <p>Signature du Directeur :</p>
+          <p>توقيع المدير :</p>
           <br /><br /><br />
           <p>__________________________</p>
+        </div>
+        <div class="col-6 text-start">
+          <p>حرر في : __________________</p>
+          <p>بتاريخ : **{{ 'now'|date:'d F Y' }}**</p>
         </div>
       </div>
 
       <div class="text-center mt-5 no-print">
-        <button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print me-2"></i> Imprimer l'Ordre de Mission</button>
+        <button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print me-2"></i> طباعة إذن بمأمورية</button>
 
-        <a href="{% url 'personnel:detail_personnel' pk=visite.personnel.pk %}" class="btn btn-secondary ms-2"><i class="fas fa-arrow-left me-2"></i> Retour à la Fiche Personnel</a>
+        <a href="{% url 'personnel:detail_personnel' pk=visite.personnel.pk %}" class="btn btn-secondary ms-2"><i class="fas fa-arrow-left me-2"></i> العودة إلى ملف الموظف</a>
       </div>
     </div>
   </body>
