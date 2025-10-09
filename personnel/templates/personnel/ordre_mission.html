@@ -62,109 +62,120 @@
           <div class="col-12 text-center">
             <h2 class="fw-bolder text-uppercase">إذن بمؤمورية</h2>
             <br />
-            <h3 class="fw-bolder text-uppercase">عـــدد : .... /{% now ' Y' %}</h3>
+            {% comment %} <h3 class="fw-bolder text-uppercase">عـــدد : .... /{% now ' Y' %}</h3>
+            <h3 class="fw-bolder">التــاريخ : .... /{% now ' Y' %}</h3> {% endcomment %}
           </div>
         </div>
-      </div>
 
-      <h4 class="mb-4 text-primary">تفاصيل الموظف</h4>
-      <div class="row mb-4 border p-3 rounded">
-        <div class="col-md-6">
-          <p>
-            <strong>الســــيد(ة) :</strong> {{ visite.personnel.prenom }} {{ visite.personnel.nom }}
-          </p>
-          <p>
-            <strong>الخــطة:</strong> {{ visite.personnel.prenom }} {{ visite.personnel.nom }}
-          </p>
-          <p>
-            <strong>مطلب بالتوجه إلى:</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ visite.entreprise.nom }}
-          </p>
-          <p>
-            <strong>السبـــب:</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ visite.objet }}
-          </p>
-          <p>
-            <strong>وسيلة النقل :</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ visite.personnel.fonction }}
-          </p>
-          <p>
-            <strong>طبيعة المؤمورية :</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ visite.personnel.fonction }}
-          </p>
-          <p>
-            <strong>تحمل الوكالة لنفقات الإقامة :</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; لا
-          </p>
-          <p>
-            <strong>الذهاب من :</strong>&nbsp;&nbsp;&nbsp;طبــلــبة &nbsp;&nbsp;&nbsp;
-            <strong>يوم :</strong> الإثنين &nbsp;&nbsp;&nbsp; {{ visite.date_visite|date:'d F Y' }} &nbsp;&nbsp;&nbsp; على الســـاعة : 08:00
-          </p>
-          <p>
-            &nbsp;
-            <strong>العـــودة :</strong>
-            &nbsp;&nbsp;&nbsp;
-            <strong>يوم :</strong> الإثنين &nbsp;&nbsp;&nbsp; {{ visite.date_visite|date:'d F Y' }} &nbsp;&nbsp;&nbsp; على الســـاعة : 10:00
-          </p>
+        <div class="row align-items-center mt-3">
+          <div class="col-6 text-center">
+            <h3 class="fw-bolder">عـــدد : .... /{% now 'Y' %}</h3>
+          </div>
+
+          <div class="col-6 text-start">
+            <h3 class="fw-bolder">التــاريخ : ...................{{ 'now'|date:'d/m/Y' }}</h3>
+          </div>
         </div>
 
-        <div class="col-md-6">
-          <p>
-            <strong>المــعرف الوحيــد :</strong> {{ visite.personnel.prenom }} {{ visite.personnel.nom }}
-          </p>
-          <p>
-            <strong>الصــنف :</strong> {{ visite.personnel.fonction }}
-          </p>
+        <h4 class="mb-4 text-primary">تفاصيل الموظف</h4>
+        <div class="row mb-4 border p-3 rounded">
+          <div class="col-md-6">
+            <p>
+              <strong>الســــيد(ة) :</strong> {{ visite.personnel.prenom }} {{ visite.personnel.nom }}
+            </p>
+            <p>
+              <strong>الخــطة:</strong> {{ visite.personnel.prenom }} {{ visite.personnel.nom }}
+            </p>
+            <p>
+              <strong>مطلب بالتوجه إلى:</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ visite.entreprise.nom }}
+            </p>
+            <p>
+              <strong>السبـــب:</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ visite.objet }}
+            </p>
+            <p>
+              <strong>وسيلة النقل :</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ visite.personnel.fonction }}
+            </p>
+            <p>
+              <strong>طبيعة المؤمورية :</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ visite.personnel.fonction }}
+            </p>
+            <p>
+              <strong>تحمل الوكالة لنفقات الإقامة :</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; لا
+            </p>
+            <p>
+              <strong>الذهاب من :</strong>&nbsp;&nbsp;&nbsp;{{ visite.date_depart }} &nbsp;&nbsp;&nbsp;
+              <strong>يوم :</strong> الإثنين &nbsp;&nbsp;&nbsp; {{ visite.date_visite|date:'d F Y' }} &nbsp;&nbsp;&nbsp; على الســـاعة : 08:00
+            </p>
+            <p>
+              &nbsp;
+              <strong>العـــودة :</strong>
+              &nbsp;&nbsp;&nbsp;
+              <strong>يوم :</strong> الإثنين &nbsp;&nbsp;&nbsp; {{ visite.date_visite|date:'d F Y' }} &nbsp;&nbsp;&nbsp; على الســـاعة : 10:00
+            </p>
+          </div>
+
+          <div class="col-md-6">
+            <p>
+              <strong>المــعرف الوحيــد :</strong> {{ visite.personnel.prenom }} {{ visite.personnel.nom }}
+            </p>
+            <p>
+              <strong>الصــنف :</strong> {{ visite.personnel.fonction }}
+            </p>
+          </div>
         </div>
-      </div>
 
-      <h4 class="mb-4 text-primary">تفاصيل الزيارة</h4>
-      <table class="table table-bordered mb-5">
-        <tbody>
-          <tr>
-            <td style="width: 30%;" class="bg-light">
-              <strong>الشركة المستهدفة :</strong>
-            </td>
-            <td>{{ visite.entreprise.nom }}</td>
-          </tr>
-          <tr>
-            <td class="bg-light">
-              <strong>العنوان :</strong>
-            </td>
-            <td>{{ visite.entreprise.adresse }}</td>
-          </tr>
-          <tr>
-            <td class="bg-light">
-              <strong>تاريخ المهمة :</strong>
-            </td>
-            <td>{{ visite.date_visite|date:'d F Y' }}</td>
-          </tr>
-          <tr>
-            <td class="bg-light">
-              <strong>موضوع المهمة :</strong>
-            </td>
-            <td>{{ visite.objet }}</td>
-          </tr>
-        </tbody>
-      </table>
+        <h4 class="mb-4 text-primary">تفاصيل الزيارة</h4>
+        <table class="table table-bordered mb-5">
+          <tbody>
+            <tr>
+              <td style="width: 30%;" class="bg-light">
+                <strong>الشركة المستهدفة :</strong>
+              </td>
+              <td>{{ visite.entreprise.nom }}</td>
+            </tr>
+            <tr>
+              <td class="bg-light">
+                <strong>العنوان :</strong>
+              </td>
+              <td>{{ visite.entreprise.adresse }}</td>
+            </tr>
+            <tr>
+              <td class="bg-light">
+                <strong>تاريخ المهمة :</strong>
+              </td>
+              <td>{{ visite.date_visite|date:'d F Y' }}</td>
+            </tr>
+            <tr>
+              <td class="bg-light">
+                <strong>موضوع المهمة :</strong>
+              </td>
+              <td>{{ visite.objet }}</td>
+            </tr>
+          </tbody>
+        </table>
 
-      <h4 class="mb-4 text-primary">تعليمات خاصة</h4>
-      <div style="border: 1px solid #ccc; padding: 15px; min-height: 100px; background-color: #f8f9fa;">
-        <p>يسمح للموظف بتمثيل المؤسسة في الإجراءات المتعلقة بموضوع المهمة.</p>
-        <p>يرجى ملء تقرير الزيارة فور العودة.</p>
-      </div>
-
-      <div class="row mt-5">
-        <div class="col-6 text-end">
-          <p>توقيع المدير :</p>
-          <br /><br /><br />
-          <p>__________________________</p>
+        <h4 class="mb-4 text-primary">تعليمات خاصة</h4>
+        <div style="border: 1px solid #ccc; padding: 15px; min-height: 100px; background-color: #f8f9fa;">
+          <p>يسمح للموظف بتمثيل المؤسسة في الإجراءات المتعلقة بموضوع المهمة.</p>
+          <p>يرجى ملء تقرير الزيارة فور العودة.</p>
         </div>
-        <div class="col-6 text-start">
-          <p>حرر في : __________________</p>
-          <p>بتاريخ : **{{ 'now'|date:'d F Y' }}**</p>
+
+        <div class="row mt-5">
+          <div class="col-6 text-end">
+            <p>توقيع المدير :</p>
+            <br /><br /><br />
+            <p>__________________________</p>
+          </div>
+          <div class="col-6 text-start">
+            <p>حرر في : __________________</p>
+            <p>بتاريخ : **{{ 'now'|date:'d F Y' }}**</p>
+          </div>
         </div>
-      </div>
 
-      <div class="text-center mt-5 no-print">
-        <button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print me-2"></i> طباعة إذن بمأمورية</button>
+        <div class="text-center mt-5 no-print">
+          <button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print me-2"></i> طباعة إذن بمأمورية</button>
 
-        <a href="{% url 'personnel:detail_personnel' pk=visite.personnel.pk %}" class="btn btn-secondary ms-2"><i class="fas fa-arrow-left me-2"></i> العودة إلى ملف الموظف</a>
+          <a href="{% url 'personnel:detail_personnel' pk=visite.personnel.pk %}" class="btn btn-secondary ms-2"><i class="fas fa-arrow-left me-2"></i> العودة إلى ملف الموظف</a>
+        </div>
       </div>
     </div>
   </body>

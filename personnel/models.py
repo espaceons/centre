@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from mission.models import Visite
 
 
 class Personnel(models.Model):
@@ -12,7 +13,7 @@ class Personnel(models.Model):
     # CLÉ IMPORTANTE : Référence à 'entreprise.Entreprise'
     entreprises_visitees = models.ManyToManyField(
         'entreprise.Entreprise',
-        through='Visite',
+        through='mission.Visite',
         related_name='visiteurs'
     )
 
@@ -24,25 +25,3 @@ class Personnel(models.Model):
         return reverse('personnel:detail_personnel', kwargs={'pk': self.pk})
 
 # Modèle Visite
-
-
-class Visite(models.Model):
-    personnel = models.ForeignKey(Personnel, on_delete=models.CASCADE)
-
-    # CLÉ IMPORTANTE : Référence à 'entreprise.Entreprise'
-    entreprise = models.ForeignKey(
-        'entreprise.Entreprise', on_delete=models.CASCADE)
-
-    date_visite = models.DateField()
-    objet = models.CharField(max_length=255)
-    rapport = models.TextField(blank=True, null=True)
-
-    class Meta:
-        unique_together = ('personnel', 'entreprise', 'date_visite')
-        ordering = ['-date_visite']
-
-    def __str__(self):
-        return f"Visite de {self.personnel.nom} à {self.entreprise.nom}"
-
-    def get_absolute_url(self):
-        return reverse('personnel:detail_personnel', kwargs={'pk': self.personnel.pk})

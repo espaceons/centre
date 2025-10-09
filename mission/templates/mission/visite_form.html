@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-10">
+        <h1 class="text-center mb-4 text-primary">
+          {% if form.instance.pk %}
+            <span dir="rtl">تعديل المهمة</span> (Modifier la Mission)
+          {% else %}
+            <span dir="rtl">إنشاء مهمة جديدة</span> (Créer une Nouvelle Mission)
+          {% endif %}
+        </h1>
+
+        <!-- Formulaire aligné en RTL pour les labels arabes -->
+        <form method="post" class="border p-4 rounded shadow-lg bg-white" dir="rtl">
+          {% csrf_token %}
+
+          <!-- Afficher les erreurs non liées à un champ (erreurs globales) avant les champs -->
+          {% if form.non_field_errors %}
+            <div class="alert alert-danger mb-4" role="alert" dir="rtl">
+              <h4 class="alert-heading">خطأ في النموذج (Erreur de Formulaire)</h4>
+              {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          <!-- Parcourir les champs du formulaire -->
+          {% for field in form %}
+            <div class="mb-3 form-group">
+              <!-- Afficher les erreurs spécifiques au champ -->
+              {% if field.errors %}
+                {% for error in field.errors %}
+                  <div class="alert alert-danger small p-2" role="alert" dir="rtl">{{ error }}</div>
+                {% endfor %}
+              {% endif %}
+
+              <label for="{{ field.id_for_label }}" class="form-label d-block text-end fw-bold">
+                <!-- Afficher le libellé du champ -->
+                {{ field.label }}
+                {% if field.field.required %}
+                  <span class="text-danger">*</span>
+                {% endif %}
+              </label>
+
+              <!-- Le champ d'entrée lui-même sera stylisé par JS ci-dessous -->
+              {{ field }}
+
+              <!-- Afficher l'aide contextuelle -->
+              {% if field.help_text %}
+                <small class="form-text text-muted d-block text-end" dir="rtl">{{ field.help_text }}</small>
+              {% endif %}
+            </div>
+          {% endfor %}
+
+          <div class="d-flex justify-content-center mt-5">
+            <button type="submit" class="btn btn-success btn-lg mx-2"><span dir="rtl">حفظ المهمة</span> (Enregistrer)</button>
+
+            <!-- Bouton Annuler/Retour -->
+            {% if form.instance.personnel %}
+              <a href="{% url 'personnel:detail_personnel' pk=form.instance.personnel.pk %}" class="btn btn-secondary btn-lg mx-2"><span dir="rtl">إلغاء</span> (Annuler)</a>
+            {% else %}
+              <!-- CORRECTION : Retourne à la liste des missions qui existe (mission:liste_missions) -->
+              <a href="{% url 'mission:liste_missions' %}" class="btn btn-secondary btn-lg mx-2"><span dir="rtl">إلغاء</span> (Annuler)</a>
+            {% endif %}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPT POUR AJOUTER LA CLASSE form-control AUX CHAMPS DJANGO GÉNÉRÉS -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Sélectionnez tous les inputs, selects et textareas qui ne sont pas des radios ou des checkboxes
+      const formElements = document.querySelectorAll('form input:not([type="radio"]):not([type="checkbox"]), form select, form textarea')
+    
+      formElements.forEach(function (element) {
+        // Ajoutez la classe form-control si elle n'est pas déjà présente
+        if (!element.classList.contains('form-control')) {
+          element.classList.add('form-control')
+        }
+      })
+    })
+  </script>
+{% endblock %}

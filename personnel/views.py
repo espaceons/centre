@@ -2,7 +2,9 @@ from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView, DeleteView
 )
 from django.urls import reverse_lazy
-from .models import Personnel, Visite
+
+from mission.models import Visite
+from .models import Personnel
 
 
 # =======================================================
@@ -71,7 +73,8 @@ class VisiteCreateView(CreateView):
 
 class VisiteUpdateView(UpdateView):
     model = Visite
-    fields = ['personnel', 'entreprise', 'date_visite', 'objet', 'rapport']
+    fields = ['personnel', 'entreprise', 'date_visite',
+              'objet', 'rapport']
     template_name = 'personnel/visite_form.html'
 
     # Rediriger vers la page du personnel après la modification

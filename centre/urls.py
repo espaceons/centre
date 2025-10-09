@@ -33,6 +33,8 @@ urlpatterns = [
 
     # URLs de l'application Personnel (inclut les visites)
     path('personnel/', include('personnel.urls')),
+    # URLs de l'application Mission
+    path('mission/', include('mission.urls')),
 
 ]
 
