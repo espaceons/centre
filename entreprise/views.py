@@ -38,7 +38,7 @@ class EntrepriseCreateView(CreateView):
 class EntrepriseUpdateView(UpdateView):
     """Permet de modifier une entreprise existante."""
     model = Entreprise
-    fields = ['nom', 'adresse', 'secteur_activite']
+    fields = ['nom', 'adresse', 'secteur_activite', 'delegation', 'contact']
     template_name = 'entreprise/entreprise_form.html'
     success_url = reverse_lazy('entreprise:liste_entreprises')
 

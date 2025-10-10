@@ -4,6 +4,7 @@
 {% block content %}
   <div class="container mt-5">
     <div class="row justify-content-center">
+      <!-- Correction de la balise <div> au lieu de <di> -->
       <div class="col-lg-8 col-md-10">
         <h1 class="text-center mb-4 text-primary">
           {% if form.instance.pk %}
@@ -45,7 +46,7 @@
                 {% endif %}
               </label>
 
-              <!-- Le champ d'entrée lui-même sera stylisé par JS ci-dessous -->
+              <!-- Le champ d'entrée lui-même : La magie du calendrier (datetime-local) est gérée dans mission/forms.py -->
               {{ field }}
 
               <!-- Afficher l'aide contextuelle -->
@@ -63,6 +64,7 @@
               <a href="{% url 'personnel:detail_personnel' pk=form.instance.personnel.pk %}" class="btn btn-secondary btn-lg mx-2"><span dir="rtl">إلغاء</span> (Annuler)</a>
             {% else %}
               <!-- CORRECTION : Retourne à la liste des missions qui existe (mission:liste_missions) -->
+
               <a href="{% url 'mission:liste_missions' %}" class="btn btn-secondary btn-lg mx-2"><span dir="rtl">إلغاء</span> (Annuler)</a>
             {% endif %}
           </div>
@@ -71,16 +73,29 @@
     </div>
   </div>
 
-  <!-- SCRIPT POUR AJOUTER LA CLASSE form-control AUX CHAMPS DJANGO GÉNÉRÉS -->
+  <!-- SCRIPT POUR AJOUTER LA CLASSE form-control AUX CHAMPS DJANGO GÉNÉRÉS (révisé) -->
+
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      // Sélectionnez tous les inputs, selects et textareas qui ne sont pas des radios ou des checkboxes
-      const formElements = document.querySelectorAll('form input:not([type="radio"]):not([type="checkbox"]), form select, form textarea')
+      // Sélectionnez tous les inputs (sauf radio/checkbox), selects et textareas.
+      // Les champs de date/heure (datetime-local) reçoivent déjà le form-control
+      // ou sont gérés par le navigateur.
+      const formElements = document.querySelectorAll('form select, ' + 'form textarea, ' + 'form input:not([type="radio"]):not([type="checkbox"])')
     
       formElements.forEach(function (element) {
         // Ajoutez la classe form-control si elle n'est pas déjà présente
         if (!element.classList.contains('form-control')) {
           element.classList.add('form-control')
+        }
+    
+        // Pour s'assurer que les champs datetime-local fonctionnent correctement
+        // on ajoute une vérification spécifique pour ce type d'input
+        if (element.tagName === 'INPUT' && (element.type === 'date' || element.type === 'datetime-local')) {
+          // Le navigateur gère le calendrier nativement si le type est correct.
+          // Ici, on s'assure qu'ils ont bien la classe form-control pour le style Bootstrap.
+          if (!element.classList.contains('form-control')) {
+            element.classList.add('form-control')
+          }
         }
       })
     })

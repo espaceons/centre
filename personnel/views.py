@@ -56,7 +56,7 @@ class VisiteCreateView(CreateView):
     model = Visite
     # Le champ 'entreprise' sera un choix parmi les Entreprises disponibles
     fields = ['personnel', 'entreprise', 'date_visite', 'objet', 'rapport']
-    template_name = 'personnel/visite_form.html'
+    template_name = 'mission/visite_form.html'
 
     def get_initial(self):
         initial = super().get_initial()
@@ -75,7 +75,7 @@ class VisiteUpdateView(UpdateView):
     model = Visite
     fields = ['personnel', 'entreprise', 'date_visite',
               'objet', 'rapport']
-    template_name = 'personnel/visite_form.html'
+    template_name = 'mission/visite_form.html'
 
     # Rediriger vers la page du personnel après la modification
     def get_success_url(self):
