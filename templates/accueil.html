@@ -1,59 +1,102 @@
-{% extends 'base.html' %} {% block title %}
-  Accueil | Centre de Formation
-{% endblock %} {% block content %}
-  <div class="p-5 mb-4 bg-light rounded-3 shadow-sm">
-    <div class="container-fluid py-5 text-center">
-      <h1 class="display-5 fw-bold text-primary">Bienvenue au Centre de Formation</h1>
-      <p class="col-md-8 fs-4 mx-auto">Votre partenaire privilégié pour le développement des compétences et la synergie entre les talents et les entreprises partenaires.</p>
-      <a href="{% url 'entreprise:liste_entreprises' %}" class="btn btn-primary btn-lg mt-3"><i class="fas fa-search me-2"></i> Explorer nos Entreprises</a>
-    </div>
-  </div>
+{% extends 'base.html' %}
+{% load static %}
 
-  <h2 class="text-center mb-4 text-secondary">Nos Missions</h2>
-  <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
-    <div class="col">
-      <div class="card h-100 border-0 shadow-sm text-center">
-        <div class="card-body">
-          <i class="fas fa-chalkboard-teacher fa-3x text-info mb-3"></i>
-          <h5 class="card-title">Formation de Qualité</h5>
-          <p class="card-text">Offrir des programmes de formation adaptés aux besoins réels du marché de l'emploi.</p>
-        </div>
+{% block content %}
+  <div class="container mt-5" dir="rtl">
+    <h1 class="text-center mb-5 text-success"><span dir="rtl">لوحة القيادة</span> (Tableau de Bord des Missions)</h1>
+
+    <!-- Cartes de Statistiques -->
+    <div class="row mb-5 justify-content-center">
+      <!-- Carte Personnel -->
+      <div class="col-md-4 col-sm-6 mb-4">
+        <!-- Lien vers la liste du personnel -->
+        <a href="{% url 'personnel:liste_personnels' %}" class="text-decoration-none d-block">
+          <div class="card shadow-lg border-0 rounded-3 h-100">
+            <div class="card-body text-center bg-primary text-white rounded-3">
+              <h2 class="card-title display-4 fw-bold">{{ total_personnel }}</h2>
+              <p class="card-text fs-5">
+                <span dir="rtl">الموظفين</span> (Personnel)
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Carte Entreprises -->
+      <div class="col-md-4 col-sm-6 mb-4">
+        <!-- Lien vers la liste des entreprises -->
+        <a href="{% url 'entreprise:liste_entreprises' %}" class="text-decoration-none d-block">
+          <div class="card shadow-lg border-0 rounded-3 h-100">
+            <div class="card-body text-center bg-info text-white rounded-3">
+              <h2 class="card-title display-4 fw-bold">{{ total_entreprises }}</h2>
+              <p class="card-text fs-5">
+                <span dir="rtl">الشركات</span> (Entreprises Partenaires)
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Carte Missions -->
+      <div class="col-md-4 col-sm-6 mb-4">
+        <!-- Lien vers la liste des missions -->
+        <a href="{% url 'mission:liste_missions' %}" class="text-decoration-none d-block">
+          <div class="card shadow-lg border-0 rounded-3 h-100">
+            <div class="card-body text-center bg-success text-white rounded-3">
+              <h2 class="card-title display-4 fw-bold">{{ total_missions }}</h2>
+              <p class="card-text fs-5">
+                <span dir="rtl">المهام الكلية</span> (Missions Totales)
+              </p>
+            </div>
+          </div>
+        </a>
       </div>
     </div>
 
-    <div class="col">
-      <div class="card h-100 border-0 shadow-sm text-center">
-        <div class="card-body">
-          <i class="fas fa-handshake fa-3x text-warning mb-3"></i>
-          <h5 class="card-title">Synergie Entreprise</h5>
-          <p class="card-text">Faciliter les stages et les missions pour créer des liens durables entre étudiants et entreprises.</p>
-        </div>
-      </div>
-    </div>
+    <!-- Liste des Dernières Missions -->
+    <h2 class="text-center mb-4 text-secondary"><span dir="rtl">آخر 5 مهام</span> (5 Dernières Missions)</h2>
 
-    <div class="col">
-      <div class="card h-100 border-0 shadow-sm text-center">
-        <div class="card-body">
-          <i class="fas fa-briefcase fa-3x text-success mb-3"></i>
-          <h5 class="card-title">Développement de Carrière</h5>
-          <p class="card-text">Accompagner les participants vers un emploi stable et des opportunités d'évolution professionnelle.</p>
-        </div>
+    {% if dernieres_missions %}
+      <div class="table-responsive shadow-lg rounded">
+        <table class="table table-striped table-hover align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th scope="col" class="text-end">
+                <span dir="rtl">الموظف</span> (Personnel)
+              </th>
+              <th scope="col" class="text-end">
+                <span dir="rtl">الشركة</span> (Entreprise)
+              </th>
+              <th scope="col" class="text-end">
+                <span dir="rtl">تاريخ الإنطلاق</span> (Départ)
+              </th>
+              <th scope="col" class="text-end">
+                <span dir="rtl">الغرض</span> (Objet)
+              </th>
+              <th scope="col" class="text-center">
+                <span dir="rtl">الإجراءات</span> (Actions)
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for mission in dernieres_missions %}
+              <tr>
+                <td class="text-end">{{ mission.personnel }}</td>
+                <td class="text-end">{{ mission.entreprise }}</td>
+                <td class="text-end">{{ mission.date_depart|date:'d M Y H:i' }}</td>
+                <td class="text-end">{{ mission.objet|truncatechars:50 }}</td>
+                <td class="text-center">
+                  <a href="{% url 'mission:modifier_mission' pk=mission.pk %}" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i>Modifier</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
       </div>
-    </div>
-  </div>
-
-  <div class="row text-center bg-light p-4 rounded-3">
-    <div class="col-md-4">
-      <h3 class="display-4 fw-bold text-primary">150+</h3>
-      <p class="lead">Entreprises Partenaires</p>
-    </div>
-    <div class="col-md-4">
-      <h3 class="display-4 fw-bold text-primary">500+</h3>
-      <p class="lead">Personnels Formés</p>
-    </div>
-    <div class="col-md-4">
-      <h3 class="display-4 fw-bold text-primary">95%</h3>
-      <p class="lead">Taux de Satisfaction</p>
-    </div>
+    {% else %}
+      <div class="alert alert-warning text-center mt-4" role="alert">
+        <span dir="rtl">لا توجد مهام مسجلة بعد.</span> (Aucune mission enregistrée pour le moment.)
+      </div>
+    {% endif %}
   </div>
 {% endblock %}
