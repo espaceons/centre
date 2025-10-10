@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'entreprise',
     'personnel',
     'mission',
+    'import_export',
 ]
 
 MIDDLEWARE = [
