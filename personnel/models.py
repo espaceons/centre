@@ -7,7 +7,7 @@ class Personnel(models.Model):
     prenom = models.CharField(max_length=100)
     nom = models.CharField(max_length=100)
     fonction = models.CharField(max_length=100)
-    date_embauche = models.DateField()
+    iu = models.CharField()
 
     # Relation Many-to-Many via le modèle Visite
     # CLÉ IMPORTANTE : Référence à 'entreprise.Entreprise'

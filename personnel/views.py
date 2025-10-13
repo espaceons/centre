@@ -27,7 +27,7 @@ class PersonnelCreateView(CreateView):
     """Permet de créer une nouvelle entreprise."""
     model = Personnel
     fields = ['prenom', 'nom', 'fonction',
-              'date_embauche']  # Champs du formulaire
+              'iu']  # Champs du formulaire
     template_name = 'personnel/personnel_form.html'
     # Où rediriger après succès
     success_url = reverse_lazy('personnel:liste_personnels')
@@ -37,7 +37,7 @@ class PersonnelUpdateView(UpdateView):
     model = Personnel
     # Incluez les champs directs ET la relation M2M pour la modifier si nécessaire
     fields = ['prenom', 'nom', 'fonction',
-              'date_embauche', 'entreprises_visitees']
+              'iu', 'entreprises_visitees']
     template_name = 'personnel/personnel_form.html'
     success_url = reverse_lazy('personnel:liste_personnels')
 

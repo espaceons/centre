@@ -19,13 +19,17 @@ class Visite(models.Model):
 
     # Date et heure de départ (Date de début de la mission)
     date_depart = models.DateTimeField(
-        verbose_name="Date et Heure de Départ", null=True, blank=True
-    )
+        verbose_name="Date et Heure de Départ", null=True, blank=True)
 
     # Date et heure de retour (Date de fin de la mission)
     date_retour = models.DateTimeField(
-        verbose_name="Date et Heure de Retour", null=True, blank=True
-    )
+        verbose_name="Date et Heure de Retour", null=True, blank=True)
+    lieu = models.CharField(
+        max_length=255, verbose_name="Lieu de depart", null=True, blank=True)
+    type_mission = models.CharField(
+        max_length=255, verbose_name="Type de Mission", null=True, blank=True)
+    moyen_transport = models.CharField(
+        max_length=255, verbose_name="Moyen de Transport", null=True, blank=True)
 
     objet = models.CharField(
         max_length=255, verbose_name="Objet de la Mission")

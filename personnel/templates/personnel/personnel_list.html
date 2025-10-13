@@ -15,7 +15,7 @@
               <tr>
                 <th scope="col">Nom Complet</th>
                 <th scope="col">Fonction</th>
-                <th scope="col">Date d'Embauche</th>
+                <th scope="col">Identifiant unique</th>
                 <th scope="col">Actions</th>
               </tr>
             </thead>
@@ -24,7 +24,7 @@
                 <tr>
                   <td>{{ personne.prenom }} **{{ personne.nom }}**</td>
                   <td>{{ personne.fonction }}</td>
-                  <td>{{ personne.date_embauche|date:'d/m/Y' }}</td>
+                  <td>{{ personne.iu }}</td>
                   <td>
                     <a href="{% url 'personnel:detail_personnel' pk=personne.pk %}" class="btn btn-sm btn-info text-white me-2" title="Voir les détails"><i class="fas fa-eye"></i>Detail</a>
                     <a href="{% url 'personnel:modifier_personnel' pk=personne.pk %}" class="btn btn-sm btn-warning me-2" title="Modifier"><i class="fas fa-edit"></i>Modifier</a>

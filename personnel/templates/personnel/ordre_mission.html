@@ -1,5 +1,6 @@
 {% load static %}
 {% load tz %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
   <head>
@@ -33,11 +34,15 @@
         margin-left: 0 !important;
         margin-right: 0.5rem !important;
       }
+      /* Ajout d'une marge à droite pour les étiquettes dans le corps du texte */
+      .label-margin {
+        margin-right: 1.5rem;
+      }
     </style>
   </head>
   <body>
     <div class="container">
-      <div class="mission-header border-bottom border-dark pb-3 mb-4">
+      <div class="mission-header">
         <div class="row align-items-start">
           <div class="col-3 text-end">
             <div style="width: 200px; height: auto; margin-right: auto; margin-left: 0;">
@@ -60,122 +65,129 @@
 
         <div class="row mt-3">
           <div class="col-12 text-center">
-            <h2 class="fw-bolder text-uppercase">إذن بمؤمورية</h2>
+            <h2 class="fw-bolder text-uppercase">إذن بمأمورية</h2>
             <br />
-            {% comment %} <h3 class="fw-bolder text-uppercase">عـــدد : .... /{% now ' Y' %}</h3>
-            <h3 class="fw-bolder">التــاريخ : .... /{% now ' Y' %}</h3> {% endcomment %}
           </div>
         </div>
 
         <div class="row align-items-center mt-3">
           <div class="col-6 text-center">
-            <h3 class="fw-bolder">عـــدد : .... /{% now 'Y' %}</h3>
+            <h3 class="fw-bolder">عـــدد : ............. /{% now 'Y' %}</h3>
           </div>
 
           <div class="col-6 text-start">
-            <h3 class="fw-bolder">التــاريخ : ...................{{ 'now'|date:'d/m/Y' }}</h3>
+            <!-- Utilisation du format D/M/Y pour la date -->
+            <h3 class="fw-bolder">التــاريخ :{% now 'd/m/Y' %}</h3>
           </div>
         </div>
+      </div>
 
-        <h4 class="mb-4 text-primary">تفاصيل الموظف</h4>
-        <div class="row mb-4 border p-3 rounded">
-          <div class="col-md-6">
-            <p>
-              <strong>الســــيد(ة) :</strong> {{ visite.personnel.prenom }} {{ visite.personnel.nom }}
-            </p>
-            <p>
-              <strong>الخــطة:</strong> {{ visite.personnel.prenom }} {{ visite.personnel.nom }}
-            </p>
-            <p>
-              <strong>مطلب بالتوجه إلى:</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ visite.entreprise.nom }}
-            </p>
-            <p>
-              <strong>السبـــب:</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ visite.objet }}
-            </p>
-            <p>
-              <strong>وسيلة النقل :</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ visite.personnel.fonction }}
-            </p>
-            <p>
-              <strong>طبيعة المؤمورية :</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ visite.personnel.fonction }}
-            </p>
-            <p>
-              <strong>تحمل الوكالة لنفقات الإقامة :</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; لا
-            </p>
-            <p>
-              <strong>الذهاب من :</strong>&nbsp;&nbsp;&nbsp;{{ visite.date_depart }} &nbsp;&nbsp;&nbsp;
-              <strong>يوم :</strong> الإثنين &nbsp;&nbsp;&nbsp; {{ visite.date_visite|date:'d F Y' }} &nbsp;&nbsp;&nbsp; على الســـاعة : 08:00
-            </p>
-            <p>
-              &nbsp;
-              <strong>العـــودة :</strong>
-              &nbsp;&nbsp;&nbsp;
-              <strong>يوم :</strong> الإثنين &nbsp;&nbsp;&nbsp; {{ visite.date_visite|date:'d F Y' }} &nbsp;&nbsp;&nbsp; على الســـاعة : 10:00
-            </p>
-          </div>
+      {% comment %} <h4 class="mb-4 text-primary">تفاصيل الموظف و المهمة</h4> {% endcomment %}
+      <div class="my-4">
+        <div class="col-md-6">
+          <p>
+            <strong>الســــيد(ة) :</strong> {{ visite.personnel.prenom }} {{ visite.personnel.nom }}
+            <span class="me-5"></span>
+            <strong>المــعرف الوحيــد :</strong> {{ visite.personnel.iu }}
+          </p>
+          <p>
+            <strong>الخــطة:</strong> {{ visite.personnel.fonction }}
+            <span class="me-5"></span>
+            <strong>الصــنف :</strong> {{ visite.personnel.fonction|default_if_none:'غير محدد' }}
+          </p>
+          <p>
+            <strong>مطالب بالتوجه إلى:</strong> <span class="me-5"></span> <strong>{{ visite.personnel.entreprises_visitees.all|join:', ' }}</strong>
+          </p>
 
-          <div class="col-md-6">
-            <p>
-              <strong>المــعرف الوحيــد :</strong> {{ visite.personnel.prenom }} {{ visite.personnel.nom }}
-            </p>
-            <p>
-              <strong>الصــنف :</strong> {{ visite.personnel.fonction }}
-            </p>
-          </div>
+          <p>
+            <strong>السبـــب:</strong> <span class="me-5"></span>{{ visite.objet }}
+          </p>
+          <p>
+            <strong>وسيلة النقل :</strong> <span class="me-5"></span>{{ visite.moyen_transport|default_if_none:'غير محدد' }}
+          </p>
+          <p>
+            <strong>طبيعة المأمورية :</strong> <span class="me-5"></span>{{ visite.type_mission|default_if_none:'غير محدد' }}
+          </p>
+          <p>
+            <strong>تحمل الوكالة لنفقات الإقامة :</strong><span class="me-5"></span>{{ visite.prise_en_charge_hebergement|yesno:' نعم ,لا' }}
+          </p>
+          <p>
+            <strong>الذهاب من :</strong> <span class="filled-field"><span class="me-5"></span>{{ visite.lieu }}</span>
+            <span class="me-5"></span>
+            {% language 'ar' %}
+            <strong>يوم :</strong> <span class="filled-field">{{ visite.date_depart|date:'l' }}</span>
+            {% endlanguage %} <span class="me-5"></span>
+            <!-- Changement de 'd F Y' à 'd-m-Y' pour éviter un nom de mois non traduit si la locale n'est pas parfaite -->
+            <strong>بتاريخ :</strong> <span class="filled-field">{{ visite.date_depart|date:'d-m-Y' }}</span>
+            <span class="me-5"></span>
+            <strong>الساعة :</strong> <span class="filled-field">{{ visite.date_depart|date:'H:i' }}</span>
+          </p>
+          <p>
+            <strong>العــودة :</strong> <span class="filled-field"><span class="me-5"></span>{{ visite.lieu }}</span>
+            <span class="me-5"></span>
+            {% language 'ar' %}
+            <strong>يوم :</strong> <span class="filled-field">{{ visite.date_depart|date:'l' }}</span>
+            {% endlanguage %} <span class="me-5"></span> <span class="me-5"></span>
+            <!-- Changement de 'd F Y' à 'd-m-Y' pour éviter un nom de mois non traduit si la locale n'est pas parfaite -->
+            <strong>بتاريخ :</strong> <span class="filled-field">{{ visite.date_retour|date:'d-m-Y' }}</span>
+            <span class="me-5"></span>
+            <strong>الساعة :</strong> <span class="filled-field">{{ visite.date_retour|date:'H:i' }}</span>
+          </p>
         </div>
+      </div>
 
-        <h4 class="mb-4 text-primary">تفاصيل الزيارة</h4>
-        <table class="table table-bordered mb-5">
-          <tbody>
-            <tr>
-              <td style="width: 30%;" class="bg-light">
-                <strong>الشركة المستهدفة :</strong>
-              </td>
-              <td>{{ visite.entreprise.nom }}</td>
-            </tr>
-            <tr>
-              <td class="bg-light">
-                <strong>العنوان :</strong>
-              </td>
-              <td>{{ visite.entreprise.adresse }}</td>
-            </tr>
-            <tr>
-              <td class="bg-light">
-                <strong>تاريخ المهمة :</strong>
-              </td>
-              <td>{{ visite.date_visite|date:'d F Y' }}</td>
-            </tr>
-            <tr>
-              <td class="bg-light">
-                <strong>موضوع المهمة :</strong>
-              </td>
-              <td>{{ visite.objet }}</td>
-            </tr>
-          </tbody>
-        </table>
+      <table class="table table-bordered table-official mb-5">
+        <thead>
+          <tr class="bg-light">
+            <th class="text-center h5" style="border-right: 1px solid #000;">مكان خاص بالمؤسسة المنتفعة بالمهمة</th>
+            <th class="text-center h5" style="border-left: 1px solid #000;">مكان خاص بالأمر بالدفع</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>
+              <br />
+              <p style="text-align: center;">
+                <strong>إذا كانت المهمة تشمل عدة مؤسسات يقع التنصيص عليها خلف الصفحة.</strong>
+              </p>
+              <p style="text-align: center;">الوصول إلى المؤسسة :</p>
+              <p>يوم :............... غلى الساعة :............</p>
+              <p style="text-align: center;">الذهاب من المؤسسة :</p>
+              <p>يوم :............... غلى الساعة :............</p>
 
-        <h4 class="mb-4 text-primary">تعليمات خاصة</h4>
-        <div style="border: 1px solid #ccc; padding: 15px; min-height: 100px; background-color: #f8f9fa;">
-          <p>يسمح للموظف بتمثيل المؤسسة في الإجراءات المتعلقة بموضوع المهمة.</p>
-          <p>يرجى ملء تقرير الزيارة فور العودة.</p>
-        </div>
+              <p style="text-align: left;">رئيس (ة)المؤسسة</p>
+            </th>
+            <th>
+              <br />
+              <p>سينتفع بتسبقة قدرها :.................................</p>
+              <p>................................................................دينارا</p>
+              <p style="text-align: center;">يوم :.............................................</p>
+              <br /><br /><br /><br />
+              <p style="text-align: center;">الأمــــــر بالدفع</p>
+            </th>
+          </tr>
+          <tr>
+            <th colspan="2" style="text-align: center;font-size: 20px;">
+              <strong>خاص بالعون المكلف بالمهمة</strong>
+            </th>
+          </tr>
+          <tr>
+            <th colspan="2">
+              <p>إني الممضي أسفله : ..............................................................................................</p>
+              <p>أعترف أني تسلمت تسبقة قدرها :....................................................................................................... دينارا</p>
+              <p>وألتزم بتسويتها في أجل لايتجاوز ثلاثة أشهر و بإذن لرئيس مصلحة التأجير أن يخصم مقدار التسبقة من مستحقاتي في حال عدم التسوية في الأجال المعنية طبلبة في ............</p>
+            </th>
+          </tr>
+        </tbody>
+      </table>
 
-        <div class="row mt-5">
-          <div class="col-6 text-end">
-            <p>توقيع المدير :</p>
-            <br /><br /><br />
-            <p>__________________________</p>
-          </div>
-          <div class="col-6 text-start">
-            <p>حرر في : __________________</p>
-            <p>بتاريخ : **{{ 'now'|date:'d F Y' }}**</p>
-          </div>
-        </div>
+      <div class="row mt-5">
+        <img src="{% static 'images/pied.png' %}" alt="pied_page" />
+      </div>
 
-        <div class="text-center mt-5 no-print">
-          <button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print me-2"></i> طباعة إذن بمأمورية</button>
-
-          <a href="{% url 'personnel:detail_personnel' pk=visite.personnel.pk %}" class="btn btn-secondary ms-2"><i class="fas fa-arrow-left me-2"></i> العودة إلى ملف الموظف</a>
-        </div>
+      <div class="text-center mt-5 no-print">
+        <button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print me-2"></i> طباعة إذن بمأمورية</button>
+        <a href="{% url 'personnel:detail_personnel' pk=visite.personnel.pk %}" class="btn btn-secondary ms-2"><i class="fas fa-arrow-left me-2"></i> العودة إلى ملف الموظف</a>
       </div>
     </div>
   </body>

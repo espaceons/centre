@@ -23,6 +23,8 @@ class VisiteCreateView(CreateView):
         'entreprise',
         'date_depart',
         'date_retour',
+        'lieu',
+        'type_mission',
         'objet',
         'rapport'
     ]
@@ -57,6 +59,9 @@ class VisiteUpdateView(UpdateView):
         'entreprise',
         'date_depart',
         'date_retour',
+        'lieu',
+        'type_mission',
+        'moyen_transport',
         'objet',
         'rapport'
     ]
