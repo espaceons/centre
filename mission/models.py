@@ -5,6 +5,16 @@ from django.urls import reverse
 
 
 class Visite(models.Model):
+
+    # Définition des choix d'état
+    ETAT_CHOICES = [
+        ('PLANNIFIEE', 'Planifiée'),
+        ('EN_COURS', 'En Cours'),
+        ('REALISE', 'Realiser'),
+        ('ANNULEE', 'Annulée'),
+        ('NON_REALISER', 'Non Realiser'),
+    ]
+
     # Lien vers l'employé
     personnel = models.ForeignKey(
         'personnel.Personnel', on_delete=models.CASCADE,
@@ -38,8 +48,13 @@ class Visite(models.Model):
     rapport = models.TextField(
         blank=True, null=True, verbose_name="Rapport de Mission")
 
-    # Ancien champ conservé (non obligatoire) pour la compatibilité
     date_visite = models.DateField(null=True, blank=True)
+    etat = models.CharField(
+        max_length=50,
+        choices=ETAT_CHOICES,
+        default='PLANNIFIEE',
+        verbose_name="État de la Mission"
+    )
 
     class Meta:
         verbose_name = "Mission / Visite"

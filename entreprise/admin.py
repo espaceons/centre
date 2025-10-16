@@ -1,6 +1,7 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from .models import Entreprise  # Assurez-vous que l'importation est correcte
+# Assurez-vous que l'importation est correcte
+from .models import Entreprise, TuteurEntreprise
 from .resources import EntrepriseResource
 
 
@@ -27,3 +28,11 @@ class EntrepriseAdmin(ImportExportModelAdmin):
 
     # Filtres
     list_filter = ('nom',)
+
+
+@admin.register(TuteurEntreprise)
+class TuteurEntrepriseAdmin(admin.ModelAdmin):
+    # Ceci facilite la création et la recherche des tuteurs
+    list_display = ('prenom', 'nom', 'entreprise', 'fonction')
+    list_filter = ('entreprise', 'fonction')
+    search_fields = ('nom', 'prenom', 'entreprise__nom')

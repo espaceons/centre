@@ -1,29 +1,81 @@
-{% extends 'base.html' %} {% block title %}
+{% extends 'base.html' %}
+{% block title %}
   Détail de {{ entreprise.nom }}
-{% endblock %} {% block content %}
+{% endblock %}
+
+{% block content %}
   <h1 class="h3 text-primary"><i class="fas fa-info-circle me-2"></i> Détails de l'Entreprise</h1>
 
+  <!-- Carte des informations de l'entreprise -->
   <div class="card shadow-sm mt-4">
     <div class="card-header bg-primary text-white">
       <h5 class="mb-0">{{ entreprise.nom }}</h5>
     </div>
     <div class="card-body">
-      <p>
-        <strong>Secteur d'Activité :</strong> {{ entreprise.secteur_activite }}
-      </p>
-      <p>
-        <strong>Adresse :</strong> {{ entreprise.adresse }}
-      </p>
-      <p>
-        <strong>Delegation :</strong> {{ entreprise.delegation }}
-      </p>
-      <p>
-        <strong>Contact :</strong> {{ entreprise.contact }}
-      </p>
+      <div class="row">
+        <div class="col-md-6">
+          <p>
+            <strong>Secteur d'Activité :</strong> {{ entreprise.secteur_activite }}
+          </p>
+          <p>
+            <strong>Adresse :</strong> {{ entreprise.adresse }}
+          </p>
+          <p>
+            <strong>Delegation :</strong> {{ entreprise.delegation }}
+          </p>
+        </div>
+        <div class="col-md-6">
+          <p>
+            <strong>Contact :</strong> {{ entreprise.contact }}
+          </p>
+          <!-- Affichage de la position géo sous forme de lien -->
+          <p>
+            <strong>Position Géo :</strong>
+            {% if entreprise.position %}
+              <a href="{{ entreprise.position }}" target="_blank" class="text-info fw-bold" title="Voir sur la carte">Voir la carte <i class="fas fa-map-marker-alt ms-1"></i></a>
+            {% else %}
+              <span class="text-muted">N/A</span>
+            {% endif %}
+          </p>
+        </div>
+      </div>
     </div>
     <div class="card-footer d-flex justify-content-end">
-      <a href="{% url 'entreprise:modifier_entreprise' entreprise.pk %}" class="btn btn-warning me-2"><i class="fas fa-edit me-1"></i> Modifier</a>
+      <a href="{% url 'entreprise:modifier_entreprise' entreprise.pk %}" class="btn btn-warning me-2"><i class="fas fa-edit me-1"></i> Modifier l'Entreprise</a>
       <a href="{% url 'entreprise:liste_entreprises' %}" class="btn btn-secondary"><i class="fas fa-list me-1"></i> Retour à la liste</a>
+    </div>
+  </div>
+
+  <!-- Section Liste des Tuteurs -->
+  <div class="card shadow-sm mt-5">
+    <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+      <!-- Utilisation de tuteurs_entreprise.count -->
+      <h5 class="mb-0"><i class="fas fa-user-tie me-2"></i> Tuteurs d'Entreprise Associés ({{ entreprise.tuteurs_entreprise.count }})</h5>
+
+      <!-- Lien pour ajouter un nouveau tuteur -->
+      <a href="{% url 'entreprise:ajouter_tuteur' %}?entreprise={{ entreprise.pk }}" class="btn btn-light btn-sm fw-bold"><i class="fas fa-plus me-1"></i> Ajouter un Tuteur</a>
+    </div>
+
+    <div class="card-body p-0">
+      <!-- Utilisation de tuteurs_entreprise.all -->
+      {% if entreprise.tuteurs_entreprise.all %}
+        <ul class="list-group list-group-flush">
+          {% for tuteur in entreprise.tuteurs_entreprise.all %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="mb-1 text-primary">{{ tuteur.prenom }} {{ tuteur.nom }}</h6>
+                <small class="text-muted">{{ tuteur.fonction }} | Tél: {{ tuteur.telephone }} | Email: {{ tuteur.email }}</small>
+              </div>
+              <div>
+                <a href="{% url 'entreprise:detail_tuteur' pk=tuteur.pk %}" class="btn btn-outline-info btn-sm me-2" title="Voir Détail"><i class="fas fa-eye">Detail</i></a>
+                <a href="{% url 'entreprise:modifier_tuteur' pk=tuteur.pk %}" class="btn btn-outline-warning btn-sm" title="Modifier"><i class="fas fa-edit">Modifier</i></a>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <div class="alert alert-info m-3 text-center" role="alert">Aucun tuteur n'est actuellement associé à cette entreprise.</div>
+      {% endif %}
     </div>
   </div>
 {% endblock %}

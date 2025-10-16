@@ -1,0 +1,85 @@
+{% extends 'base.html' %} {% block content %}
+  <div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="fw-bold text-primary">{{ tuteur.prenom }} {{ tuteur.nom }}</h1>
+      <div class="actions">
+        <a href="{% url 'entreprise:modifier_tuteur' pk=tuteur.pk %}" class="btn btn-primary me-2"><i class="fas fa-edit me-2"></i> Modifier</a>
+        <a href="{% url 'entreprise:supprimer_tuteur' pk=tuteur.pk %}" class="btn btn-danger"><i class="fas fa-trash-alt me-2"></i> Supprimer</a>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-10 offset-md-1">
+        <div class="card shadow-lg border-0">
+          <div class="card-body">
+            <h5 class="card-title fw-bold mb-3 border-bottom pb-2">Informations Générales</h5>
+            <div class="row mb-3">
+              <div class="col-sm-6">
+                <p class="mb-1">
+                  <strong>Matricule:</strong>
+                </p>
+                <p class="fw-bold text-secondary">{{ tuteur.matricule }}</p>
+              </div>
+              <div class="col-sm-6">
+                <p class="mb-1">
+                  <strong>Entreprise:</strong>
+                </p>
+                <p class="fw-bold text-secondary">
+                  <a href="{% url 'entreprise:detail_entreprise' pk=tuteur.entreprise.pk %}" class="text-decoration-none">{{ tuteur.entreprise.nom }}</a>
+                </p>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-sm-6">
+                <p class="mb-1">
+                  <strong>Fonction:</strong>
+                </p>
+                <p class="fw-bold text-secondary">{{ tuteur.fonction }}</p>
+              </div>
+              <div class="col-sm-6">
+                <p class="mb-1">
+                  <strong>Date d'intégration:</strong>
+                </p>
+                <p class="fw-bold text-secondary">{{ tuteur.date_integration|date:'d F Y' }}</p>
+              </div>
+            </div>
+
+            <h5 class="card-title fw-bold mb-3 border-bottom pb-2 mt-4">Coordonnées</h5>
+            <div class="row mb-3">
+              <div class="col-sm-6">
+                <p class="mb-1">
+                  <strong>Téléphone:</strong>
+                </p>
+                <p class="fw-bold text-secondary">{{ tuteur.telephone|default_if_none:'N/A' }}</p>
+              </div>
+              <div class="col-sm-6">
+                <p class="mb-1">
+                  <strong>Email:</strong>
+                </p>
+                <p class="fw-bold text-secondary">{{ tuteur.email }}</p>
+              </div>
+            </div>
+
+            <!--  {% if tuteur.contratapprentissage_set.all %}
+              <h5 class="card-title fw-bold mb-3 border-bottom pb-2 mt-4">Contrats Encadrés</h5>
+              <ul class="list-group list-group-flush">
+                {% for contrat in tuteur.contratapprentissage_set.all %}
+                  <li class="list-group-item">
+                    Contrat de l'apprenti **{{ contrat.apprenti.prenom }} {{ contrat.apprenti.nom }}** (Du {{ contrat.date_debut|date:'d/m/Y' }} au {{ contrat.date_fin|date:'d/m/Y' }})
+                    
+                    <a href="{% url 'contrats:detail_contrat' pk=contrat.pk %}" class="float-end btn btn-sm btn-outline-info">Voir Contrat</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}  -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <a href="{% url 'entreprise:liste_tuteurs' %}" class="btn btn-secondary"><i class="fas fa-arrow-left me-2"></i> Retour à la liste des tuteurs</a>
+    </div>
+  </div>
+{% endblock %}

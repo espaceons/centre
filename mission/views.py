@@ -25,8 +25,10 @@ class VisiteCreateView(CreateView):
         'date_retour',
         'lieu',
         'type_mission',
+        'moyen_transport',
         'objet',
-        'rapport'
+        'rapport',
+        'etat',
     ]
     template_name = 'mission/visite_form.html'
 
@@ -63,7 +65,8 @@ class VisiteUpdateView(UpdateView):
         'type_mission',
         'moyen_transport',
         'objet',
-        'rapport'
+        'rapport',
+        'etat',
     ]
     template_name = 'mission/visite_form.html'
 

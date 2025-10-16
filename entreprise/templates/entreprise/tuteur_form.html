@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="container my-5">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <div class="card shadow-lg border-0">
+          <div class="card-header bg-primary text-white text-center">
+            <h2 class="mb-0">
+              {% if form.instance.pk %}
+                Modifier Tuteur: {{ form.instance.prenom }}
+                {{ form.instance.nom }}
+              {% else %}
+                Ajouter un Nouveau Tuteur d'Entreprise
+              {% endif %}
+            </h2>
+          </div>
+          <div class="card-body">
+            <form method="post">
+              {% csrf_token %}
+              <!-- Utilisation de crispy_forms pour un rendu de formulaire agréable -->
+              {{ form.as_p }}
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                <button type="submit" class="btn btn-success btn-lg me-md-2"><i class="fas fa-save me-2"></i> Enregistrer</button>
+                <a href="{% url 'entreprise:liste_tuteurs' %}" class="btn btn-secondary btn-lg"><i class="fas fa-times me-2"></i> Annuler</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

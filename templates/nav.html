@@ -6,9 +6,10 @@
       <div class="navbar-nav ms-auto">
         <a class="nav-link {% if request.path == '/entreprise/' %}active{% endif %}" href="{% url 'accueil' %}"><i class="fas fa-home me-1"></i> Accueil</a>
         <a class="nav-link {% if 'entreprise' in request.path == '/entreprise/' %}active{% endif %}" aria-current="page" href="{% url 'entreprise:liste_entreprises' %}"><i class="fas fa-building me-1"></i> Entreprises</a>
-        <a class="nav-link {% if 'personnel' in request.path == '/personnel/' %}active{% endif %}" href="{% url 'personnel:liste_personnels' %}"><i class="fas fa-users me-1"></i> Personnel</a>
+        <a class="nav-link {% if 'entreprise' in request.path == '/entreprise/' %}active{% endif %}" href="{% url 'entreprise:liste_tuteurs' %}"><i class="fas fa-users me-1"></i> Tuteurs</a>
+        <a class="nav-link {% if 'personnel' in request.path == '/personnel/' %}active{% endif %}" href="{% url 'personnel:liste_personnels' %}"><i class="fas fa-users me-1"></i> Personnels</a>
 
-        <a class="nav-link {% if 'mission' in request.path == '/mission/' %}active{% endif %}" href="{% url 'mission:liste_missions' %}"><i class="fas fa-clipboard-list me-1"></i> Mission</a>
+        <a class="nav-link {% if 'mission' in request.path == '/mission/' %}active{% endif %}" href="{% url 'mission:liste_missions' %}"><i class="fas fa-clipboard-list me-1"></i> Missions</a>
       </div>
     </div>
   </div>

@@ -6,6 +6,8 @@ from django.urls import reverse_lazy
 from mission.models import Visite
 from .models import Personnel
 
+from django.shortcuts import render, get_object_or_404
+
 
 # =======================================================
 # VUES CRUD POUR LE PERSONNEL
@@ -18,9 +20,34 @@ class PersonnelListView(ListView):
     context_object_name = 'personnels'
 
 
-class PersonnelDetailView(DetailView):
-    model = Personnel
-    template_name = 'personnel/personnel_detail.html'
+def detail_personnel(request, pk):
+    """
+    Affiche le détail d'un membre du personnel et prépare le contexte
+    pour afficher le nombre de missions par entreprise.
+    """
+    # 1. Récupération du Personnel
+    personnel = get_object_or_404(Personnel, pk=pk)
+
+    # 2. Récupérer les entreprises distinctes visitées par ce personnel
+    # On utilise la relation ManyToMany 'entreprises_visitees'
+    entreprises_visitees = personnel.entreprises_visitees.all().distinct()
+
+    # 3. Logique clé : Calculer et injecter le nombre de missions pour chaque entreprise
+    for entreprise in entreprises_visitees:
+        # Calcule le nombre de missions liées à CETTE entreprise (via visite_set)
+        # qui concernent CE membre du personnel (personnel=personnel)
+        count = entreprise.visite_set.filter(personnel=personnel).count()
+
+        # Injecte le résultat dans un nouvel attribut temporaire 'mission_count'
+        entreprise.mission_count = count
+
+    context = {
+        'personnel': personnel,
+        # On passe explicitement la liste enrichie au template
+        'entreprises_visitees_enrichies': entreprises_visitees
+    }
+
+    return render(request, 'personnel/personnel_detail.html', context)
 
 
 class PersonnelCreateView(CreateView):

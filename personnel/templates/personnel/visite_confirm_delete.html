@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}
+  Supprimer la Mission
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card shadow-lg border-danger">
+          <div class="card-header bg-danger text-white">
+            <h4 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i> Confirmation de Suppression</h4>
+          </div>
+          <div class="card-body">
+            <p class="lead text-center">Êtes-vous sûr de vouloir supprimer la mission suivante ?</p>
+
+            <div class="alert alert-light border p-3 mt-3">
+              <h5 class="alert-heading text-danger">Mission Détails :</h5>
+              <p class="mb-1">
+                <strong>Personnel :</strong> {{ object.personnel }}
+              </p>
+              <p class="mb-1">
+                <strong>Entreprise :</strong> {{ object.entreprise.nom }}
+              </p>
+              <p class="mb-1">
+                <strong>Date de Départ :</strong> {{ object.date_depart|date:'d F Y à H:i' }}
+              </p>
+              <p class="mb-0">
+                <strong>Objet :</strong> {{ object.objet }}
+              </p>
+            </div>
+
+            <form method="post" class="mt-4 text-center">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger btn-lg me-3"><i class="fas fa-trash-alt me-1"></i> Confirmer la Suppression</button>
+              <a href="{% url 'personnel:detail_personnel' pk=object.personnel.pk %}" class="btn btn-secondary btn-lg"><i class="fas fa-times me-1"></i> Annuler</a>
+            </form>
+          </div>
+          <div class="card-footer text-muted text-center">Attention : Cette action est irréversible.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,102 +1,136 @@
-{% extends 'base.html' %}
-{% load static %}
+{% extends 'base.html' %} {% load static %} {% block content %}
+<div class="container mt-5" dir="rtl">
+  <h1 class="text-center mb-5 text-success">
+    <span dir="rtl">لوحة القيادة</span> (Tableau de Bord des Missions)
+  </h1>
 
-{% block content %}
-  <div class="container mt-5" dir="rtl">
-    <h1 class="text-center mb-5 text-success"><span dir="rtl">لوحة القيادة</span> (Tableau de Bord des Missions)</h1>
-
-    <!-- Cartes de Statistiques -->
-    <div class="row mb-5 justify-content-center">
-      <!-- Carte Personnel -->
-      <div class="col-md-4 col-sm-6 mb-4">
-        <!-- Lien vers la liste du personnel -->
-        <a href="{% url 'personnel:liste_personnels' %}" class="text-decoration-none d-block">
-          <div class="card shadow-lg border-0 rounded-3 h-100">
-            <div class="card-body text-center bg-primary text-white rounded-3">
-              <h2 class="card-title display-4 fw-bold">{{ total_personnel }}</h2>
-              <p class="card-text fs-5">
-                <span dir="rtl">الموظفين</span> (Personnel)
-              </p>
-            </div>
+  <!-- Cartes de Statistiques -->
+  <div class="row mb-5 justify-content-center">
+    <!-- Carte Personnel -->
+    <div class="col-md-4 col-sm-6 mb-4">
+      <!-- Lien vers la liste du personnel -->
+      <a
+        href="{% url 'personnel:liste_personnels' %}"
+        class="text-decoration-none d-block"
+      >
+        <div class="card shadow-lg border-0 rounded-3 h-100">
+          <div class="card-body text-center bg-primary text-white rounded-3">
+            <h2 class="card-title display-4 fw-bold">{{ total_personnel }}</h2>
+            <p class="card-text fs-5">
+              <span dir="rtl">الموظفين</span> (Personnel)
+            </p>
           </div>
-        </a>
-      </div>
-
-      <!-- Carte Entreprises -->
-      <div class="col-md-4 col-sm-6 mb-4">
-        <!-- Lien vers la liste des entreprises -->
-        <a href="{% url 'entreprise:liste_entreprises' %}" class="text-decoration-none d-block">
-          <div class="card shadow-lg border-0 rounded-3 h-100">
-            <div class="card-body text-center bg-info text-white rounded-3">
-              <h2 class="card-title display-4 fw-bold">{{ total_entreprises }}</h2>
-              <p class="card-text fs-5">
-                <span dir="rtl">الشركات</span> (Entreprises Partenaires)
-              </p>
-            </div>
+        </div>
+      </a>
+    </div>
+    <!-- Carte Tuteurs entreprise -->
+    <div class="col-md-4 col-sm-6 mb-4">
+      <!-- Lien vers la liste des Tuteurs -->
+      <a
+        href="{% url 'entreprise:liste_tuteurs' %}"
+        class="text-decoration-none d-block"
+      >
+        <div class="card shadow-lg border-0 rounded-3 h-100">
+          <div class="card-body text-center bg-secondary text-white rounded-3">
+            <h2 class="card-title display-4 fw-bold">{{ total_tuteurs }}</h2>
+            <p class="card-text fs-5">
+              <span dir="rtl">المشرفين بالمؤسسة</span> (Tuteurs d'entreprise)
+            </p>
           </div>
-        </a>
-      </div>
-
-      <!-- Carte Missions -->
-      <div class="col-md-4 col-sm-6 mb-4">
-        <!-- Lien vers la liste des missions -->
-        <a href="{% url 'mission:liste_missions' %}" class="text-decoration-none d-block">
-          <div class="card shadow-lg border-0 rounded-3 h-100">
-            <div class="card-body text-center bg-success text-white rounded-3">
-              <h2 class="card-title display-4 fw-bold">{{ total_missions }}</h2>
-              <p class="card-text fs-5">
-                <span dir="rtl">المهام الكلية</span> (Missions Totales)
-              </p>
-            </div>
-          </div>
-        </a>
-      </div>
+        </div>
+      </a>
     </div>
 
-    <!-- Liste des Dernières Missions -->
-    <h2 class="text-center mb-4 text-secondary"><span dir="rtl">آخر 5 مهام</span> (5 Dernières Missions)</h2>
+    <!-- Carte Entreprises -->
+    <div class="col-md-4 col-sm-6 mb-4">
+      <!-- Lien vers la liste des entreprises -->
+      <a
+        href="{% url 'entreprise:liste_entreprises' %}"
+        class="text-decoration-none d-block"
+      >
+        <div class="card shadow-lg border-0 rounded-3 h-100">
+          <div class="card-body text-center bg-info text-white rounded-3">
+            <h2 class="card-title display-4 fw-bold">
+              {{ total_entreprises }}
+            </h2>
+            <p class="card-text fs-5">
+              <span dir="rtl">الشركات</span> (Entreprises Partenaires)
+            </p>
+          </div>
+        </div>
+      </a>
+    </div>
 
-    {% if dernieres_missions %}
-      <div class="table-responsive shadow-lg rounded">
-        <table class="table table-striped table-hover align-middle">
-          <thead class="table-dark">
-            <tr>
-              <th scope="col" class="text-end">
-                <span dir="rtl">الموظف</span> (Personnel)
-              </th>
-              <th scope="col" class="text-end">
-                <span dir="rtl">الشركة</span> (Entreprise)
-              </th>
-              <th scope="col" class="text-end">
-                <span dir="rtl">تاريخ الإنطلاق</span> (Départ)
-              </th>
-              <th scope="col" class="text-end">
-                <span dir="rtl">الغرض</span> (Objet)
-              </th>
-              <th scope="col" class="text-center">
-                <span dir="rtl">الإجراءات</span> (Actions)
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for mission in dernieres_missions %}
-              <tr>
-                <td class="text-end">{{ mission.personnel }}</td>
-                <td class="text-end">{{ mission.entreprise }}</td>
-                <td class="text-end">{{ mission.date_depart|date:'d M Y H:i' }}</td>
-                <td class="text-end">{{ mission.objet|truncatechars:50 }}</td>
-                <td class="text-center">
-                  <a href="{% url 'mission:modifier_mission' pk=mission.pk %}" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i>Modifier</a>
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    {% else %}
-      <div class="alert alert-warning text-center mt-4" role="alert">
-        <span dir="rtl">لا توجد مهام مسجلة بعد.</span> (Aucune mission enregistrée pour le moment.)
-      </div>
-    {% endif %}
+    <!-- Carte Missions -->
+    <div class="col-md-4 col-sm-6 mb-4">
+      <!-- Lien vers la liste des missions -->
+      <a
+        href="{% url 'mission:liste_missions' %}"
+        class="text-decoration-none d-block"
+      >
+        <div class="card shadow-lg border-0 rounded-3 h-100">
+          <div class="card-body text-center bg-success text-white rounded-3">
+            <h2 class="card-title display-4 fw-bold">{{ total_missions }}</h2>
+            <p class="card-text fs-5">
+              <span dir="rtl">المهام الكلية</span> (Missions Totales)
+            </p>
+          </div>
+        </div>
+      </a>
+    </div>
   </div>
+
+  <!-- Liste des Dernières Missions -->
+  <h2 class="text-center mb-4 text-secondary">
+    <span dir="rtl">آخر 5 مهام</span> (5 Dernières Missions)
+  </h2>
+
+  {% if dernieres_missions %}
+  <div class="table-responsive shadow-lg rounded">
+    <table class="table table-striped table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col" class="text-end">
+            <span dir="rtl">الموظف</span> (Personnel)
+          </th>
+          <th scope="col" class="text-end">
+            <span dir="rtl">الشركة</span> (Entreprise)
+          </th>
+          <th scope="col" class="text-end">
+            <span dir="rtl">تاريخ الإنطلاق</span> (Départ)
+          </th>
+          <th scope="col" class="text-end">
+            <span dir="rtl">الغرض</span> (Objet)
+          </th>
+          <th scope="col" class="text-center">
+            <span dir="rtl">الإجراءات</span> (Actions)
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for mission in dernieres_missions %}
+        <tr>
+          <td class="text-end">{{ mission.personnel }}</td>
+          <td class="text-end">{{ mission.entreprise }}</td>
+          <td class="text-end">{{ mission.date_depart|date:'d M Y H:i' }}</td>
+          <td class="text-end">{{ mission.objet|truncatechars:50 }}</td>
+          <td class="text-center">
+            <a
+              href="{% url 'mission:modifier_mission' pk=mission.pk %}"
+              class="btn btn-sm btn-outline-primary"
+              ><i class="fas fa-edit"></i>Modifier</a
+            >
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="alert alert-warning text-center mt-4" role="alert">
+    <span dir="rtl">لا توجد مهام مسجلة بعد.</span> (Aucune mission enregistrée
+    pour le moment.)
+  </div>
+  {% endif %}
+</div>
 {% endblock %}
