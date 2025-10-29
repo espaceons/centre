@@ -19,17 +19,17 @@ urlpatterns = [
 
     # CREATE (Ajout direct)
     # 1. URL de base pour créer une mission (peut être appelée depuis le menu principal)
-    # Exemple : /missions/creer/
+
     path('creer/', views.VisiteCreateView.as_view(), name='creer_mission'),
 
     # 2. URL pour créer une mission dans le contexte d'un personnel spécifique
     # Cette URL est utile pour pré-remplir le champ 'personnel' dans le formulaire.
-    # Exemple : /missions/personnel/5/creer/
+
     path('personnel/<int:personnel_pk>/creer/',
          views.VisiteCreateView.as_view(), name='creer_mission_pour_personnel'),
 
     # 3. URL pour modifier une mission existante (nécessite l'ID de la mission)
-    # Exemple : /missions/12/modifier/
+
     path('<int:pk>/modifier/', views.VisiteUpdateView.as_view(),
          name='modifier_mission'),
 

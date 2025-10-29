@@ -1,12 +1,12 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %}
   <div class="container mt-5" dir="rtl">
     <h1 class="text-center mb-4 text-primary"><span dir="rtl">قائمة المهام</span> (Liste de Toutes les Missions)</h1>
 
     <div class="text-start mb-3">
-      <a href="{% url 'mission:creer_mission' %}" class="btn btn-success"><i class="fas fa-plus"></i> <span dir="rtl">إضافة مهمة جديدة</span> (Ajouter une Mission)</a>
+      <a href="{% url 'mission:creer_mission' %}" class="btn btn-success">
+        <i class="fas fa-plus"></i>
+        <span dir="rtl">إضافة مهمة جديدة</span> (Ajouter une Mission)
+      </a>
     </div>
 
     {% if missions %}
@@ -22,13 +22,15 @@
                 <span dir="rtl">الشركة</span> (Entreprise)
               </th>
               <th scope="col" class="text-end">
-                <span dir="rtl">تاريخ الإنطلاق</span> (Date Départ)
+                <span dir="rtl">تاريخ الإنطلاق</span> (Départ)
               </th>
+              <!-- Nouveau champ Lieu -->
               <th scope="col" class="text-end">
-                <span dir="rtl">تاريخ العودة</span> (Date Retour)
+                <span dir="rtl">المكان</span> (Lieu)
               </th>
-              <th scope="col" class="text-end">
-                <span dir="rtl">الغرض</span> (Objet)
+              <!-- Nouveau champ État -->
+              <th scope="col" class="text-center">
+                <span dir="rtl">الحالة</span> (État)
               </th>
               <th scope="col" class="text-center">
                 <span dir="rtl">الإجراءات</span> (Actions)
@@ -40,14 +42,40 @@
               <tr>
                 <th scope="row" class="text-end">{{ forloop.counter }}</th>
                 <td class="text-end">
-                  <a href="{% url 'personnel:detail_personnel' pk=mission.personnel.pk %}">{{ mission.personnel }}</a>
+                  <a href="{% url 'personnel:detail_personnel' pk=mission.personnel.pk %}" class="text-decoration-none text-dark">{{ mission.personnel|truncatechars:20 }}</a>
                 </td>
-                <td class="text-end">{{ mission.entreprise }}</td>
-                <td class="text-end">{{ mission.date_depart|date:'d M Y H:i' }}</td>
-                <td class="text-end">{{ mission.date_retour|date:'d M Y H:i' }}</td>
-                <td class="text-end">{{ mission.objet|truncatechars:50 }}</td>
+                <td class="text-end">{{ mission.entreprise|truncatechars:20 }}</td>
+                <!-- Affichage de la date/heure sur deux lignes pour la clarté -->
+                <td class="text-end small">
+                  {% if mission.date_depart %}
+                    {{ mission.date_depart|date:'d M Y' }}<br />
+                    <span class="text-muted">{{ mission.date_depart|date:'H:i' }}</span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+                <!-- Affichage du Lieu -->
+                <td class="text-end">{{ mission.lieu|default:'-' }}</td>
+
+                <!-- Affichage de l'État avec Badge (logique CSS) -->
                 <td class="text-center">
-                  <a href="{% url 'mission:modifier_mission' pk=mission.pk %}" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> <span dir="rtl">تعديل</span> (Modifier)</a>
+                  {% if mission.etat == 'PLANNIFIEE' %}
+                    <span class="badge bg-info">مخطط</span>
+                  {% elif mission.etat == 'EN_COURS' %}
+                    <span class="badge bg-warning">جارية</span>
+                  {% elif mission.etat == 'REALISE' %}
+                    <span class="badge bg-success">منجزة</span>
+                  {% elif mission.etat == 'ANNULEE' %}
+                    <span class="badge bg-danger">ملغاة</span>
+                  {% elif mission.etat == 'NON_REALISER' %}
+                    <span class="badge bg-secondary">لم تنجز</span>
+                  {% else %}
+                    <span class="badge bg-secondary">{{ mission.get_etat_display }}</span>
+                  {% endif %}
+                </td>
+
+                <td class="text-center">
+                  <a href="{% url 'mission:modifier_mission' pk=mission.pk %}" class="btn btn-sm btn-primary" title="Modifier"><i class="fas fa-edit"></i>Modifier</a>
                 </td>
               </tr>
             {% endfor %}

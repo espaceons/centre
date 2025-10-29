@@ -1,5 +1,3 @@
-# app mission
-
 from django.db import models
 from django.urls import reverse
 
@@ -64,9 +62,10 @@ class Visite(models.Model):
         ordering = ['-date_depart']
 
     def __str__(self):
-        return f"Mission de {self.personnel} à {self.entreprise} le {self.date_depart.date()}"
+        # Vérifiez si date_depart est non nul avant d'appeler .date()
+        date_str = self.date_depart.date() if self.date_depart else "Date inconnue"
+        return f"Mission de {self.personnel} à {self.entreprise} le {date_str}"
 
     def get_absolute_url(self):
         # Redirection vers la liste des missions ou la page du personnel
         return reverse('personnel:detail_personnel', kwargs={'pk': self.personnel.pk})
-    # Propriété utile pour obtenir le jour de la semaine du départ

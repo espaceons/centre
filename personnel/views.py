@@ -20,34 +20,154 @@ class PersonnelListView(ListView):
     context_object_name = 'personnels'
 
 
+# def detail_personnel(request, pk):
+#     """
+#     Affiche le détail d'un membre du personnel et prépare le contexte
+#     pour afficher le nombre de missions par entreprise.
+#     """
+#     # 1. Récupération du Personnel
+#     personnel = get_object_or_404(Personnel, pk=pk)
+
+#     # 2. Récupérer les entreprises distinctes visitées par ce personnel
+#     # On utilise la relation ManyToMany 'entreprises_visitees'
+#     entreprises_visitees = personnel.entreprises_visitees.all().distinct()
+
+#     # -----------------------------------------------------------------------------------------------
+#     #    ('ANNULEE', 'Annulée'),  ('NON_REALISER', 'Non Realiser'),
+#     # 3. Logique clé : Calculer et injecter le nombre de missions pour chaque entreprise, par état.
+#     # Nous supposons que les valeurs des états sont : 'PLANNIFIEE', 'EN_COUR', 'REALISEE'
+#     for entreprise in entreprises_visitees:
+#         # A. Compteur Plannifié (Badge Bleu/Info)
+#         count_planifiee = entreprise.visite_set.filter(
+#             personnel=personnel,
+#             etat='PLANNIFIEE'
+#         ).count()
+
+#         # B. Compteur En cours (Badge Jaune/Warning)
+#         count_en_cours = entreprise.visite_set.filter(
+#             personnel=personnel,
+#             etat='EN_COUR'
+#         ).count()
+
+#         # C. Compteur Réalisé (Badge Vert/Success)
+#         count_realisee = entreprise.visite_set.filter(
+#             personnel=personnel,
+#             etat='REALISEE'
+#         ).count()
+#         # D. Compteur Annulée (Badge Vert/Success)
+#         count_annulee = entreprise.visite_set.filter(
+#             personnel=personnel,
+#             etat='ANNULEE'
+#         ).count()
+#         # E. Compteur Non Réalisé (Badge Vert/Success)
+#         count_non_realisee = entreprise.visite_set.filter(
+#             personnel=personnel,
+#             etat='NON_REALISER'
+#         ).count()
+
+#         # Injection des résultats dans l'objet entreprise (temporairement pour le template)
+#         entreprise.count_planifiee = count_planifiee
+#         entreprise.count_en_cours = count_en_cours
+#         entreprise.count_realisee = count_realisee
+#         entreprise.count_annulee = count_annulee
+#         entreprise.count_non_realisee = count_non_realisee
+
+#         # Le compte total est toujours calculé mais n'est plus la priorité d'affichage
+#         entreprise.mission_count = count_planifiee + count_en_cours + \
+#             count_realisee + count_annulee + count_non_realisee
+
+#     context = {
+#         'personnel': personnel,
+#         # On passe explicitement la liste enrichie au template
+#         'entreprises_visitees_enrichies': entreprises_visitees
+#     }
+
+#     return render(request, 'personnel/personnel_detail.html', context)
+# =======================================================
 def detail_personnel(request, pk):
     """
     Affiche le détail d'un membre du personnel et prépare le contexte
-    pour afficher le nombre de missions par entreprise.
+    pour afficher le nombre de missions par entreprise et les statistiques globales.
     """
     # 1. Récupération du Personnel
     personnel = get_object_or_404(Personnel, pk=pk)
 
-    # 2. Récupérer les entreprises distinctes visitées par ce personnel
-    # On utilise la relation ManyToMany 'entreprises_visitees'
+    # 2. Statistiques Globales des Missions du Personnel
+    missions_du_personnel = Visite.objects.filter(personnel=personnel)
+
+    total_missions = missions_du_personnel.count()
+    missions_planifiees = missions_du_personnel.filter(
+        etat='PLANNIFIEE').count()
+    missions_en_cours = missions_du_personnel.filter(etat='EN_COURS').count()
+    missions_realisees = missions_du_personnel.filter(etat='REALISE').count()
+    missions_annulees = missions_du_personnel.filter(etat='ANNULEE').count()
+    missions_non_realisees = missions_du_personnel.filter(
+        etat='NON_REALISER').count()
+
+    # 3. Récupérer les entreprises distinctes visitées par ce personnel
+    # On utilise la relation ManyToMany 'entreprises_visitees' (via Visite)
+    # Note: On s'assure que le champ `etat` de Visite correspond bien aux valeurs de votre modèle.
+    # Les états utilisés sont: 'PLANNIFIEE', 'EN_COURS', 'REALISE', 'ANNULEE', 'NON_REALISER'
     entreprises_visitees = personnel.entreprises_visitees.all().distinct()
 
-    # 3. Logique clé : Calculer et injecter le nombre de missions pour chaque entreprise
+    # 4. Logique clé : Calculer et injecter le nombre de missions pour chaque entreprise, par état.
+    # Nouvelle liste pour stocker les entreprises enrichies
+    entreprises_visitees_list = []
+
     for entreprise in entreprises_visitees:
-        # Calcule le nombre de missions liées à CETTE entreprise (via visite_set)
-        # qui concernent CE membre du personnel (personnel=personnel)
-        count = entreprise.visite_set.filter(personnel=personnel).count()
+        # Filtrer les missions pour cette entreprise spécifique et ce personnel
+        missions_entreprise = missions_du_personnel.filter(
+            entreprise=entreprise)
 
-        # Injecte le résultat dans un nouvel attribut temporaire 'mission_count'
-        entreprise.mission_count = count
+        # A. Compteur Plannifié
+        count_planifiee = missions_entreprise.filter(etat='PLANNIFIEE').count()
 
+        # B. Compteur En cours
+        # ATTENTION: Votre code original utilisait 'EN_COUR', l'ancienne version utilisait 'EN_COURS'.
+        # J'utilise 'EN_COURS' pour être cohérent avec l'ancienne DetailView.
+        count_en_cours = missions_entreprise.filter(etat='EN_COURS').count()
+
+        # C. Compteur Réalisé
+        # ATTENTION: Votre code original utilisait 'REALISEE', l'ancienne version utilisait 'REALISE'.
+        # J'utilise 'REALISE' pour être cohérent avec l'ancienne DetailView.
+        count_realisee = missions_entreprise.filter(etat='REALISE').count()
+
+        # D. Compteur Annulée
+        count_annulee = missions_entreprise.filter(etat='ANNULEE').count()
+
+        # E. Compteur Non Réalisé
+        count_non_realisee = missions_entreprise.filter(
+            etat='NON_REALISER').count()
+
+        # Construction de l'objet de contexte (similaire à la DetailView)
+        entreprises_visitees_list.append({
+            'entreprise': entreprise,
+            'total_missions': missions_entreprise.count(),  # Total pour cette entreprise
+            'planifiees': count_planifiee,
+            'en_cours': count_en_cours,
+            'realisees': count_realisee,
+            'annulees': count_annulee,
+            'non_realisees': count_non_realisee,
+            'derniere_visite': missions_entreprise.order_by('-date_depart').first()
+        })
+
+    # 5. Création du contexte final
     context = {
         'personnel': personnel,
-        # On passe explicitement la liste enrichie au template
-        'entreprises_visitees_enrichies': entreprises_visitees
+        # Statistiques globales
+        'total_missions': total_missions,
+        'missions_planifiees': missions_planifiees,
+        'missions_en_cours': missions_en_cours,
+        'missions_realisees': missions_realisees,
+        'missions_annulees': missions_annulees,
+        'missions_non_realisees': missions_non_realisees,
+
+        # Liste des entreprises enrichies pour le tableau du bas
+        'entreprises_visitees_list': entreprises_visitees_list
     }
 
     return render(request, 'personnel/personnel_detail.html', context)
+# =======================================================
 
 
 class PersonnelCreateView(CreateView):
