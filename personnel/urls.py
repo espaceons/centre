@@ -52,9 +52,6 @@ urlpatterns = [
          views.VisiteDeleteView.as_view(), name='supprimer_visite'),
 
 
-
-
-
     # NOUVELLE ROUTE : Afficher l'Ordre de Mission pour impression
     path('visites/<int:pk>/ordre-mission/',
          views.OrdreMissionView.as_view(), name='ordre_mission'),

@@ -34,6 +34,10 @@ urlpatterns = [
          name='modifier_mission'),
 
 
+    path('ajax/entreprises/<int:personnel_id>/',
+         views.get_filtered_entreprises, name='ajax_get_entreprises'),
+
+
     # NOUVELLE ROUTE : Afficher l'Ordre de Mission pour impression
     # path('visites/<int:pk>/ordre-mission/',
     #      views.OrdreMissionView.as_view(), name='ordre_mission'),

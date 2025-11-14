@@ -7,6 +7,7 @@ class Personnel(models.Model):
     nom = models.CharField(max_length=100)
     fonction = models.CharField(max_length=100)
     iu = models.CharField()
+    grade = models.CharField(max_length=10, null=True, blank=True)
 
     # Relation Many-to-Many via le modèle Visite
     # CLÉ IMPORTANTE : Référence à 'entreprise.Entreprise'

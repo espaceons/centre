@@ -1,6 +1,4 @@
-{% load static %}
-{% load tz %}
-{% load i18n %}
+{% load static %} {% load tz %} {% load i18n %}
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
   <head>
@@ -115,27 +113,33 @@
       <div class="mission-header">
         <div class="row align-items-start">
           <div class="col-3 text-end">
-            <div style="width: 150px; height: auto; margin-right: auto; margin-left: 0;">
-              <img src="{% static 'images/logod_ATFP.png' %}" alt="Logo Droit" style="max-width: 100%; height: auto;" />
+            <div style="
+                width: 150px;
+                height: auto;
+                margin-right: auto;
+                margin-left: 0;
+              ">
+              <img src="{% static 'images/logod_ATFP.png' %}" alt="Logo Droit" style="max-width: 100%; height: auto" />
             </div>
           </div>
 
           <div class="col-6 text-center">
             <br />
-            {% comment %}Texte de la République et Agence. Décommenter si nécessaire.{% endcomment %}
-            {% comment %} <p class="mb-0 fw-bold" style="font-size: 14pt;">الجمهورية التونسية</p> {% endcomment %}
+            {% comment %}Texte de la République et Agence. Décommenter si nécessaire.{% endcomment %} {% comment %}
+            <p class="mb-0 fw-bold" style="font-size: 14pt">الجمهورية التونسية</p>
+            {% endcomment %}
           </div>
 
           <div class="col-3 text-start">
-            <div style="width: 100px; height: auto;">
-              <img src="{% static 'images/logo_ATFP_gauche.jpg' %}" alt="Logo Gauche" style="max-width: 100%; height: auto;" />
+            <div style="width: 100px; height: auto">
+              <img src="{% static 'images/logo_ATFP_gauche.jpg' %}" alt="Logo Gauche" style="max-width: 100%; height: auto" />
             </div>
           </div>
         </div>
 
         <div class="row mt-3">
           <div class="col-12 text-center">
-            <h2 class="fw-bolder text-uppercase" style="font-size: 22pt;">إذن بمأمورية</h2>
+            <h2 class="fw-bolder text-uppercase" style="font-size: 22pt">إذن بمأمورية</h2>
             <br />
           </div>
         </div>
@@ -154,51 +158,64 @@
       <div class="my-4">
         <div class="col-12">
           <p>
-            <strong>الســــيد(ة) :</strong> {{ visite.personnel.prenom }} {{ visite.personnel.nom }}
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <strong>الســــيد(ة) :</strong> {{ visite.personnel.prenom }} {{ visite.personnel.nom }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <strong>المــعرف الوحيــد :</strong> {{ visite.personnel.iu }}
           </p>
+          <br />
           <p>
             <strong>الخــطة:</strong> {{ visite.personnel.fonction }}
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <strong>الصــنف :</strong> {{ visite.personnel.fonction|default:'غير محدد' }}
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>الصــنف :</strong> {{ visite.personnel.grade|default:'غير محدد' }}
           </p>
+          <br />
           <p>
-            <strong>مطالب بالتوجه إلى:</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>{{ visite.entreprise.nom|default:'غير محدد' }}</strong>
+            <strong>مطالب بالتوجه إلى:</strong>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <strong>{{ visite.entreprise.nom|default:'غير محدد' }}</strong>
           </p>
-
+          <br />
           <p>
             <strong>السبـــب:</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ visite.objet }}
           </p>
+          <br />
           <p>
-            <strong>وسيلة النقل :</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ visite.moyen_transport|default:'غير محدد' }}
+            <strong>وسيلة النقل :</strong>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ visite.moyen_transport|default:'غير محدد' }}
           </p>
+          <br />
           <p>
-            <strong>طبيعة المأمورية :</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ visite.type_mission|default:'غير محدد' }}
+            <strong>طبيعة المأمورية :</strong>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ visite.type_mission|default:'غير محدد' }}
           </p>
+          <br />
           <p>
             <strong>تحمل الوكالة لنفقات الإقامة :</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ visite.prise_en_charge_hebergement|yesno:'نعم,لا' }}
           </p>
-
           <hr />
-
           <p>
-            <strong>الذهاب من :</strong> <span class="filled-field">{{ visite.lieu }}</span>
+            <strong>الذهاب من :</strong>
+            <span class="filled-field">{{ visite.lieu }}</span>
             &nbsp;&nbsp;{% language 'ar' %}
-            <strong>يوم :</strong> <span class="filled-field">{{ visite.date_depart|date:'l' }}</span>
+            <strong>يوم :</strong>
+            <span class="filled-field">{{ visite.date_depart|date:'l' }}</span>
             {% endlanguage %}&nbsp;&nbsp;
-            <strong>بتاريخ :</strong> <span class="filled-field">{{ visite.date_depart|date:'d-m-Y' }}</span>
+            <strong>بتاريخ :</strong>
+            <span class="filled-field">{{ visite.date_depart|date:'d-m-Y' }}</span>
             &nbsp;&nbsp;
-            <strong>الساعة :</strong> <span class="filled-field">{{ visite.date_depart|date:'H:i' }}</span>
+            <strong>الساعة :</strong>
+            <span class="filled-field">{{ visite.date_depart|date:'H:i' }}</span>
           </p>
           <p>
-            <strong>العــودة :</strong> <span class="filled-field">{{ visite.lieu }}</span>
+            <strong>العــودة :</strong>
+            <span class="filled-field">{{ visite.lieu }}</span>
             &nbsp;&nbsp;{% language 'ar' %}
-            <strong>يوم :</strong> <span class="filled-field">{{ visite.date_retour|date:'l' }}</span>
+            <strong>يوم :</strong>
+            <span class="filled-field">{{ visite.date_retour|date:'l' }}</span>
             {% endlanguage %}&nbsp;&nbsp;
-            <strong>بتاريخ :</strong> <span class="filled-field">{{ visite.date_retour|date:'d-m-Y' }}</span>
+            <strong>بتاريخ :</strong>
+            <span class="filled-field">{{ visite.date_retour|date:'d-m-Y' }}</span>
             &nbsp;&nbsp;
-            <strong>الساعة :</strong> <span class="filled-field">{{ visite.date_retour|date:'H:i' }}</span>
+            <strong>الساعة :</strong>
+            <span class="filled-field">{{ visite.date_retour|date:'H:i' }}</span>
           </p>
         </div>
       </div>
@@ -212,35 +229,35 @@
         </thead>
         <tbody>
           <tr>
-            <th style="height: 200px;">
+            <th style="height: 200px">
               <br />
-              <p style="text-align: center;">
+              <p style="text-align: center">
                 <strong>إذا كانت المهمة تشمل عدة مؤسسات يقع التنصيص عليها خلف الصفحة.</strong>
               </p>
-              <p style="text-align: center;">الوصول إلى المؤسسة :</p>
+              <p style="text-align: center">الوصول إلى المؤسسة :</p>
               <p>يوم :............... غلى الساعة :............</p>
-              <p style="text-align: center;">الذهاب من المؤسسة :</p>
+              <p style="text-align: center">الذهاب من المؤسسة :</p>
               <p>يوم :............... غلى الساعة :............</p>
 
               <br />
-              <p style="text-align: left;">رئيس (ة)المؤسسة</p>
+              <p style="text-align: left">رئيس (ة)المؤسسة</p>
             </th>
-            <th style="height: 200px;">
+            <th style="height: 200px">
               <br />
               <p>سينتفع بتسبقة قدرها :.................................</p>
               <p>................................................................دينارا</p>
-              <p style="text-align: center;">يوم :.............................................</p>
+              <p style="text-align: center">يوم :.............................................</p>
               <br /><br /><br />
-              <p style="text-align: center;">الأمــــــر بالدفع</p>
+              <p style="text-align: center">الأمــــــر بالدفع</p>
             </th>
           </tr>
           <tr>
-            <th colspan="2" style="text-align: center; font-size: 16pt;">
+            <th colspan="2" style="text-align: center; font-size: 16pt">
               <strong>خاص بالعون المكلف بالمهمة</strong>
             </th>
           </tr>
           <tr>
-            <th colspan="2" style="padding-top: 20px; padding-bottom: 20px;">
+            <th colspan="2" style="padding-top: 20px; padding-bottom: 20px">
               <p>إني الممضي أسفله : ..............................................................................................</p>
               <p>أعترف أني تسلمت تسبقة قدرها :....................................................................................................... دينارا</p>
               <p>وألتزم بتسويتها في أجل لايتجاوز ثلاثة أشهر و بإذن لرئيس مصلحة التأجير أن يخصم مقدار التسبقة من مستحقاتي في حال عدم التسوية في الأجال المعنية طبلبة في ............</p>
@@ -251,7 +268,7 @@
 
       <div class="row mt-4">
         <div class="col-12">
-          <img src="{% static 'images/pied.png' %}" alt="pied_page" style="width: 100%; height: auto;" />
+          <img src="{% static 'images/pied.png' %}" alt="pied_page" style="width:25%; height: auto" />
         </div>
       </div>
 

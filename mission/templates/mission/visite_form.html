@@ -112,6 +112,11 @@
 
 
 <!-- SCRIPT POUR AJOUTER LA CLASSE form-control AUX CHAMPS DJANGO GÉNÉRÉS (révisé) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="https://npmcdn.com/flatpickr/dist/themes/material_blue.css">
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/fr.js"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -131,6 +136,72 @@
                 element.classList.add('form-control');
             }
         });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // ... (votre script existant pour ajouter form-control reste ici)
+        // Note: L'ajout de 'form-control' est maintenant moins nécessaire pour date_depart/retour si on utilise le widget dans forms.py
+
+        // Initialisation de Flatpickr pour la date et l'heure
+        flatpickr(".datetimepicker", {
+            enableTime: true,           // Active le sélecteur d'heure
+            dateFormat: "Y-m-d H:i:S",  // Format requis par Django pour DateTimeField (avec secondes)
+            time_24hr: true,            // Format 24h
+            locale: "fr",               // Utilisez "ar" si vous souhaitez le calendrier en Arabe
+            altInput: true,             // Afficher un champ plus lisible à l'utilisateur
+            altFormat: "d-m-Y H:i",     // Format d'affichage pour l'utilisateur
+        });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // IDs des champs
+        const personnelSelect = document.getElementById('id_personnel');
+        const entrepriseSelect = document.getElementById('id_entreprise'); // S'assurer que le widget Django a cet ID
+        
+        // Fonction pour mettre à jour la liste des entreprises
+        function updateEntrepriseList(personnelId) {
+            // Vider la liste actuelle
+            entrepriseSelect.innerHTML = '<option value="">---------</option>';
+
+            if (personnelId) {
+                // Créer l'URL AJAX
+                const url = "{% url 'mission:ajax_get_entreprises' 0 %}".replace('0', personnelId);
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Remplir le champ entreprise avec les nouvelles options
+                        data.forEach(entreprise => {
+                            const option = document.createElement('option');
+                            option.value = entreprise.id;
+                            option.textContent = entreprise.nom;
+                            entrepriseSelect.appendChild(option);
+                        });
+                        
+                        // Optionnel : Afficher un message si la liste est vide
+                        if (data.length === 0) {
+                            const option = document.createElement('option');
+                            option.textContent = "Aucune entreprise liée trouvée.";
+                            option.disabled = true;
+                            entrepriseSelect.appendChild(option);
+                        }
+                    })
+                    .catch(error => console.error('Erreur lors de la récupération des entreprises:', error));
+            }
+        }
+
+        // 1. Écouter le changement sur le champ Personnel
+        personnelSelect.addEventListener('change', function() {
+            updateEntrepriseList(this.value);
+        });
+        
+        // 2. Initialiser la liste au chargement de la page (si un personnel est déjà sélectionné)
+        if (personnelSelect.value) {
+            updateEntrepriseList(personnelSelect.value);
+        }
     });
 </script>
 {% endblock %}

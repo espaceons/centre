@@ -1,8 +1,13 @@
 from django.views.generic import CreateView, UpdateView, ListView
 from django.urls import reverse_lazy
+
+from entreprise.models import Entreprise
+from mission.forms import VisiteForm
 from .models import Visite
 
 
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 # ====================================================================
 # VUE DE CRÉATION : Pour enregistrer une nouvelle mission (visite)
 # ====================================================================
@@ -15,18 +20,7 @@ class VisiteCreateView(CreateView):
     """
     model = Visite
     # Liste des champs à afficher dans le formulaire
-    fields = [
-        'personnel',
-        'entreprise',
-        'date_depart',
-        'date_retour',
-        'lieu',
-        'type_mission',
-        'moyen_transport',
-        'objet',
-        'rapport',
-        'etat',
-    ]
+    form_class = VisiteForm
     template_name = 'mission/visite_form.html'
 
     def get_success_url(self):
@@ -85,3 +79,25 @@ class VisiteListView(ListView):
     template_name = 'mission/visite_list.html'
     context_object_name = 'missions'  # Renommer le contexte pour plus de clarté
     # L'ordre est déjà défini dans le modèle : ['-date_depart']
+
+
+def get_filtered_entreprises(request, personnel_id):
+    """
+    Retourne la liste des entreprises (ID et Nom) liées à un personnel donné,
+    basée sur les missions déjà enregistrées pour cet employé.
+    """
+
+    # Récupérer les ID des entreprises associées à ce personnel
+    entreprises_ids = Visite.objects.filter(
+        personnel_id=personnel_id
+    ).values_list('entreprise_id', flat=True).distinct()
+
+    # Filtrer les entreprises
+    entreprises = Entreprise.objects.filter(
+        id__in=entreprises_ids
+    ).values('id', 'nom').order_by('nom')
+
+    # Convertir le QuerySet en liste JSON
+    data = list(entreprises)
+
+    return JsonResponse(data, safe=False)
