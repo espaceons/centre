@@ -1,10 +1,7 @@
 from django.views.generic import CreateView, UpdateView, ListView
 from django.urls import reverse_lazy
 from .models import Visite
-# Assurez-vous d'importer les modèles nécessaires (si non définis dans mission)
-# Si vous prévoyez de pré-remplir le personnel, vous devrez peut-être importer :
-# from personnel.models import Personnel
-# from django.shortcuts import get_object_or_404
+
 
 # ====================================================================
 # VUE DE CRÉATION : Pour enregistrer une nouvelle mission (visite)

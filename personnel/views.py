@@ -1,3 +1,7 @@
+# Importation nécessaire pour l'internationalisation
+from django.utils import translation
+
+
 from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView, DeleteView
 )
@@ -238,8 +242,38 @@ class VisiteDeleteView(DeleteView):
         return reverse_lazy('personnel:detail_personnel', kwargs={'pk': self.object.personnel.pk})
 
 
+# class OrdreMissionView(DetailView):
+#     """Affiche les détails d'une visite dans un format simple pour impression (Ordre de Mission)."""
+#     model = Visite
+#     template_name = 'personnel/ordre_mission.html'
+#     context_object_name = 'visite'
+
 class OrdreMissionView(DetailView):
     """Affiche les détails d'une visite dans un format simple pour impression (Ordre de Mission)."""
     model = Visite
     template_name = 'personnel/ordre_mission.html'
     context_object_name = 'visite'
+
+    def get(self, request, *args, **kwargs):
+        # 1. Active la traduction en Arabe avant de rendre le template
+        translation.activate('ar')
+
+        # 2. Continuer le processus normal de la vue (récupérer l'objet et le rendre)
+        response = super().get(request, *args, **kwargs)
+
+        # 3. Désactive la traduction après l'envoi de la réponse (bonne pratique)
+        translation.deactivate()
+        return response
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Remplacez l'accès ManyToMany dans le template
+        # Le template fait référence à "visite.personnel.entreprises_visitees.all|join:', '"
+        # Mais le modèle Visite est maintenant le "through model" et contient seulement une `entreprise` (ForeignKey)
+        # Pour simuler le comportement si vous n'avez qu'une seule entreprise par visite:
+        if self.object.entreprise:
+            context['entreprises_visitees_list'] = self.object.entreprise.nom
+        else:
+            context['entreprises_visitees_list'] = 'غير محدد'
+
+        return context

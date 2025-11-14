@@ -5,38 +5,108 @@
 <html lang="ar" dir="rtl">
   <head>
     <meta charset="utf-8" />
-    <title>إذن بمؤمورية</title>
+    <title>إذن بمأمورية</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
     <style>
-      /* Styles spécifiques à l'impression */
+      /* Styles généraux */
       body {
-        font-family: 'Arial', sans-serif; /* Conservez une police lisible */
-        margin: 30px;
-        text-align: right; /* Aligner le texte par défaut à droite */
+        font-family: 'Times New Roman', Times, serif;
+        margin: 10mm; /* Marge globale réduite */
+        text-align: right;
+        font-size: 10.5pt;
       }
+      
+      .container {
+        max-width: none !important;
+        padding: 0;
+      }
+      
+      .mission-header {
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #000;
+      }
+      
+      .mission-header h2 {
+        font-size: 18pt !important;
+        margin-top: 5px;
+      }
+      .mission-header h3 {
+        font-size: 11pt !important;
+        font-weight: bold;
+      }
+      
+      /* Réduction des marges des paragraphes de détails */
+      .my-4 p {
+        margin-bottom: 0.2rem !important;
+      }
+      
+      /* Styles des tableaux officiels */
+      .table-official th,
+      .table-official td {
+        padding: 5px;
+        vertical-align: top;
+        border: 1px solid #000 !important;
+        font-size: 10pt;
+      }
+      .table-official p {
+        margin-bottom: 0.3rem;
+      }
+      
+      /* Styles spécifiques à l'impression */
       @media print {
-        /* Masque les boutons d'action lors de l'impression */
+        * {
+          -webkit-print-color-adjust: exact !important;
+          color-adjust: exact !important;
+          font-size: 10pt !important;
+        }
+      
         .no-print {
           display: none !important;
         }
-        /* Assure que la bordure de l'en-tête est visible */
-        .mission-header {
-          border-bottom: 2px solid #000 !important;
+      
+        /* FORCAGE D'UNE SEULE PAGE */
+        html,
+        body {
+          height: 100%;
+          overflow: hidden; /* Empêche la génération d'une seconde page via le défilement */
         }
-      }
-      .mission-header {
-        padding-bottom: 10px;
-        margin-bottom: 20px;
-      }
-      /* Correction pour le bouton imprimé pour RTL */
-      .no-print .ms-2 {
-        margin-left: 0 !important;
-        margin-right: 0.5rem !important;
-      }
-      /* Ajout d'une marge à droite pour les étiquettes dans le corps du texte */
-      .label-margin {
-        margin-right: 1.5rem;
+      
+        /* Contrôle strict des sauts de page */
+        .mission-header,
+        .my-4,
+        .table-official {
+          page-break-inside: avoid !important;
+        }
+      
+        /* Éviter la coupure après les blocs majeurs */
+        .container > *:last-child {
+          page-break-after: avoid !important;
+        }
+      
+        /* Suppression des marges Bootstrap en impression */
+        .row,
+        .col-12 {
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+      
+        .mission-header img {
+          max-height: 50px;
+          width: auto;
+        }
+      
+        /* Marge réduite et suppression de la marge basse pour le pied de page */
+        .row.mt-4 {
+          margin-top: 10px !important;
+          margin-bottom: 0 !important;
+        }
+      
+        /* Réduire la hauteur des cases du tableau */
+        .table-official th[style*='height: 200px'] {
+          height: 160px !important;
+        }
       }
     </style>
   </head>
@@ -45,15 +115,15 @@
       <div class="mission-header">
         <div class="row align-items-start">
           <div class="col-3 text-end">
-            <div style="width: 200px; height: auto; margin-right: auto; margin-left: 0;">
+            <div style="width: 150px; height: auto; margin-right: auto; margin-left: 0;">
               <img src="{% static 'images/logod_ATFP.png' %}" alt="Logo Droit" style="max-width: 100%; height: auto;" />
             </div>
           </div>
 
           <div class="col-6 text-center">
-            {% comment %} <p class="mb-0 fw-bold">الجمهورية التونسية</p>
-            <p class="mb-0">الوكالة التونسية للتكوين المهني</p>
-            <p class="mb-0">الإدارة العامة</p> {% endcomment %}
+            <br />
+            {% comment %}Texte de la République et Agence. Décommenter si nécessaire.{% endcomment %}
+            {% comment %} <p class="mb-0 fw-bold" style="font-size: 14pt;">الجمهورية التونسية</p> {% endcomment %}
           </div>
 
           <div class="col-3 text-start">
@@ -65,72 +135,69 @@
 
         <div class="row mt-3">
           <div class="col-12 text-center">
-            <h2 class="fw-bolder text-uppercase">إذن بمأمورية</h2>
+            <h2 class="fw-bolder text-uppercase" style="font-size: 22pt;">إذن بمأمورية</h2>
             <br />
           </div>
         </div>
 
         <div class="row align-items-center mt-3">
           <div class="col-6 text-center">
-            <h3 class="fw-bolder">عـــدد : ............. /{% now 'Y' %}</h3>
+            <h3 class="fw-bolder">عـــدد : {{ visite.id|default:'............' }} /{% now 'Y' %}</h3>
           </div>
 
           <div class="col-6 text-start">
-            <!-- Utilisation du format D/M/Y pour la date -->
             <h3 class="fw-bolder">التــاريخ :{% now 'd/m/Y' %}</h3>
           </div>
         </div>
       </div>
 
-      {% comment %} <h4 class="mb-4 text-primary">تفاصيل الموظف و المهمة</h4> {% endcomment %}
       <div class="my-4">
-        <div class="col-md-6">
+        <div class="col-12">
           <p>
             <strong>الســــيد(ة) :</strong> {{ visite.personnel.prenom }} {{ visite.personnel.nom }}
-            <span class="me-5"></span>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <strong>المــعرف الوحيــد :</strong> {{ visite.personnel.iu }}
           </p>
           <p>
             <strong>الخــطة:</strong> {{ visite.personnel.fonction }}
-            <span class="me-5"></span>
-            <strong>الصــنف :</strong> {{ visite.personnel.fonction|default_if_none:'غير محدد' }}
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <strong>الصــنف :</strong> {{ visite.personnel.fonction|default:'غير محدد' }}
           </p>
           <p>
-            <strong>مطالب بالتوجه إلى:</strong> <span class="me-5"></span> <strong>{{ visite.personnel.entreprises_visitees.all|join:', ' }}</strong>
+            <strong>مطالب بالتوجه إلى:</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>{{ visite.entreprise.nom|default:'غير محدد' }}</strong>
           </p>
 
           <p>
-            <strong>السبـــب:</strong> <span class="me-5"></span>{{ visite.objet }}
+            <strong>السبـــب:</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ visite.objet }}
           </p>
           <p>
-            <strong>وسيلة النقل :</strong> <span class="me-5"></span>{{ visite.moyen_transport|default_if_none:'غير محدد' }}
+            <strong>وسيلة النقل :</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ visite.moyen_transport|default:'غير محدد' }}
           </p>
           <p>
-            <strong>طبيعة المأمورية :</strong> <span class="me-5"></span>{{ visite.type_mission|default_if_none:'غير محدد' }}
+            <strong>طبيعة المأمورية :</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ visite.type_mission|default:'غير محدد' }}
           </p>
           <p>
-            <strong>تحمل الوكالة لنفقات الإقامة :</strong><span class="me-5"></span>{{ visite.prise_en_charge_hebergement|yesno:' نعم ,لا' }}
+            <strong>تحمل الوكالة لنفقات الإقامة :</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ visite.prise_en_charge_hebergement|yesno:'نعم,لا' }}
           </p>
+
+          <hr />
+
           <p>
-            <strong>الذهاب من :</strong> <span class="filled-field"><span class="me-5"></span>{{ visite.lieu }}</span>
-            <span class="me-5"></span>
-            {% language 'ar' %}
+            <strong>الذهاب من :</strong> <span class="filled-field">{{ visite.lieu }}</span>
+            &nbsp;&nbsp;{% language 'ar' %}
             <strong>يوم :</strong> <span class="filled-field">{{ visite.date_depart|date:'l' }}</span>
-            {% endlanguage %} <span class="me-5"></span>
-            <!-- Changement de 'd F Y' à 'd-m-Y' pour éviter un nom de mois non traduit si la locale n'est pas parfaite -->
+            {% endlanguage %}&nbsp;&nbsp;
             <strong>بتاريخ :</strong> <span class="filled-field">{{ visite.date_depart|date:'d-m-Y' }}</span>
-            <span class="me-5"></span>
+            &nbsp;&nbsp;
             <strong>الساعة :</strong> <span class="filled-field">{{ visite.date_depart|date:'H:i' }}</span>
           </p>
           <p>
-            <strong>العــودة :</strong> <span class="filled-field"><span class="me-5"></span>{{ visite.lieu }}</span>
-            <span class="me-5"></span>
-            {% language 'ar' %}
-            <strong>يوم :</strong> <span class="filled-field">{{ visite.date_depart|date:'l' }}</span>
-            {% endlanguage %} <span class="me-5"></span> <span class="me-5"></span>
-            <!-- Changement de 'd F Y' à 'd-m-Y' pour éviter un nom de mois non traduit si la locale n'est pas parfaite -->
+            <strong>العــودة :</strong> <span class="filled-field">{{ visite.lieu }}</span>
+            &nbsp;&nbsp;{% language 'ar' %}
+            <strong>يوم :</strong> <span class="filled-field">{{ visite.date_retour|date:'l' }}</span>
+            {% endlanguage %}&nbsp;&nbsp;
             <strong>بتاريخ :</strong> <span class="filled-field">{{ visite.date_retour|date:'d-m-Y' }}</span>
-            <span class="me-5"></span>
+            &nbsp;&nbsp;
             <strong>الساعة :</strong> <span class="filled-field">{{ visite.date_retour|date:'H:i' }}</span>
           </p>
         </div>
@@ -139,13 +206,13 @@
       <table class="table table-bordered table-official mb-5">
         <thead>
           <tr class="bg-light">
-            <th class="text-center h5" style="border-right: 1px solid #000;">مكان خاص بالمؤسسة المنتفعة بالمهمة</th>
-            <th class="text-center h5" style="border-left: 1px solid #000;">مكان خاص بالأمر بالدفع</th>
+            <th class="text-center h5">مكان خاص بالمؤسسة المنتفعة بالمهمة</th>
+            <th class="text-center h5">مكان خاص بالأمر بالدفع</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <th>
+            <th style="height: 200px;">
               <br />
               <p style="text-align: center;">
                 <strong>إذا كانت المهمة تشمل عدة مؤسسات يقع التنصيص عليها خلف الصفحة.</strong>
@@ -155,24 +222,25 @@
               <p style="text-align: center;">الذهاب من المؤسسة :</p>
               <p>يوم :............... غلى الساعة :............</p>
 
+              <br />
               <p style="text-align: left;">رئيس (ة)المؤسسة</p>
             </th>
-            <th>
+            <th style="height: 200px;">
               <br />
               <p>سينتفع بتسبقة قدرها :.................................</p>
               <p>................................................................دينارا</p>
               <p style="text-align: center;">يوم :.............................................</p>
-              <br /><br /><br /><br />
+              <br /><br /><br />
               <p style="text-align: center;">الأمــــــر بالدفع</p>
             </th>
           </tr>
           <tr>
-            <th colspan="2" style="text-align: center;font-size: 20px;">
+            <th colspan="2" style="text-align: center; font-size: 16pt;">
               <strong>خاص بالعون المكلف بالمهمة</strong>
             </th>
           </tr>
           <tr>
-            <th colspan="2">
+            <th colspan="2" style="padding-top: 20px; padding-bottom: 20px;">
               <p>إني الممضي أسفله : ..............................................................................................</p>
               <p>أعترف أني تسلمت تسبقة قدرها :....................................................................................................... دينارا</p>
               <p>وألتزم بتسويتها في أجل لايتجاوز ثلاثة أشهر و بإذن لرئيس مصلحة التأجير أن يخصم مقدار التسبقة من مستحقاتي في حال عدم التسوية في الأجال المعنية طبلبة في ............</p>
@@ -181,8 +249,10 @@
         </tbody>
       </table>
 
-      <div class="row mt-5">
-        <img src="{% static 'images/pied.png' %}" alt="pied_page" />
+      <div class="row mt-4">
+        <div class="col-12">
+          <img src="{% static 'images/pied.png' %}" alt="pied_page" style="width: 100%; height: auto;" />
+        </div>
       </div>
 
       <div class="text-center mt-5 no-print">
