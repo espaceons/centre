@@ -46,4 +46,15 @@ urlpatterns = [
     path('tuteur/<int:pk>/', views.TuteurEntrepriseDetailView.as_view(),
          name='detail_tuteur'),
 
+
+    # CRUD pour la prospection d'une entreprise
+    # -----------------------------------------
+    path('prospection/', views.ProspectionListeView.as_view(),
+         name='prospection_liste'),
+    # URL pour afficher la liste des prospections pour une entreprise spécifique
+    path('<int:pk>/', views.EntrepriseProspectionDetailView.as_view(),
+         name='entreprise_prospection_detail'),
+
+
+
 ]

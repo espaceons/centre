@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h1 class="text-center mb-4 text-success fw-bold"><i class="fas fa-search me-2"></i> {% trans 'Liste des Prospections de cette Entreprise' %}</h1>
+
+    <div class="card shadow-lg border-0 rounded-3">
+      <div class="card-header bg-success text-white py-3">
+        <h5 class="mb-0">{% trans 'Entreprises à Prospecter' %}({{ entreprises_list.count }})</h5>
+      </div>
+
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover table-striped mb-0">
+            <thead>
+              <tr class="text-nowrap">
+                <th>
+                  {% trans 'Nom' %}
+                </th>
+                <th>
+                  {% trans "Secteur d'Activité" %}
+                </th>
+                <th>
+                  {% trans 'Adresse / Délégation' %}
+                </th>
+                <th>
+                  {% trans 'Contact Clé' %}
+                </th>
+                <th>
+                  {% trans 'Téléphone' %}
+                </th>
+                <th>
+                  {% trans 'Email' %}
+                </th>
+                <th class="text-center">
+                  {% trans 'Action' %}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for entreprise in entreprises_list %}
+                <tr>
+                  <td>
+                    <strong>{{ entreprise.nom }}</strong>
+                  </td>
+                  <td>{{ entreprise.secteur_activite|default:'-' }}</td>
+                  <td>
+                    {{ entreprise.adresse|default:'-' }}
+                    {% if entreprise.delegation %}
+                      <br /><small class="text-muted">({{ entreprise.delegation }})</small>
+                    {% endif %}
+                  </td>
+                  <td>{{ entreprise.contact|default:'-' }}</td>
+                  <td>
+                    {% if entreprise.telephone %}
+                      <a href="tel:{{ entreprise.telephone }}">{{ entreprise.telephone }}</a>
+                    {% else %}
+                      -
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if entreprise.email %}
+                      <a href="mailto:{{ entreprise.email }}">{{ entreprise.email }}</a>
+                    {% else %}
+                      -
+                    {% endif %}
+                  </td>
+                  <td class="text-center">
+                    {# Ajoutez ici des liens d'action, par exemple pour modifier l'entreprise ou ajouter un suivi de prospection #}
+                    <a href="{% url 'entreprise:update_entreprise' pk=entreprise.pk %}" class="btn btn-sm btn-outline-primary" title="Modifier"><i class="fas fa-edit"></i></a>
+                    <a href="#" class="btn btn-sm btn-outline-info ms-1" title="Voir les missions"><i class="fas fa-info-circle"></i></a>
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="7" class="text-center py-4 text-muted">
+                    {% trans 'Aucune entreprise trouvée dans la base de données.' %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card-footer text-end py-3">
+        {# Ajoutez ici le lien vers la pagination si vous en avez une #}
+        <a href="{% url 'entreprise:prospection' %}" class="btn btn-success"><i class="fas fa-plus me-2"></i> {% trans 'Ajouter une Nouvelle Prospection' %}</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}

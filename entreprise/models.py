@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 
@@ -19,6 +20,10 @@ class Entreprise(models.Model):
 
     def __str__(self):
         return self.nom
+
+    def get_absolute_url(self):
+        # Assurez-vous que le nom de l'URL est correct
+        return reverse('entreprise:entreprise_prospection_detail', kwargs={'pk': self.pk})
 
 
 # --- NOUVEAU MODÈLE TUTEUR DANS L'APPLICATION ENTREPRISES ---
@@ -50,3 +55,52 @@ class TuteurEntreprise(models.Model):
 
     def __str__(self):
         return f"{self.prenom} {self.nom} ({self.entreprise.nom})"
+
+
+class SuiviProspection(models.Model):
+    # Choix d'état
+    ETAT_CHOICES = [
+        ('A_CONTACTER', 'À Contacter'),
+        ('CONTACT_FAIT', 'Contact Fait'),
+        ('RENDEZ_VOUS', 'Rendez-vous Planifié'),
+        ('QUALIFIE', 'Qualifiée'),
+        ('PERDU', 'Perdue'),
+    ]
+
+    entreprise = models.ForeignKey(
+        Entreprise,
+        on_delete=models.CASCADE,
+        related_name='prospections',
+        verbose_name="Entreprise Ciblée"
+    )
+    date_suivi = models.DateField(
+        auto_now_add=True,
+        verbose_name="Date du Suivi"
+    )
+    etat = models.CharField(
+        max_length=50,
+        choices=ETAT_CHOICES,
+        default='A_CONTACTER',
+        verbose_name="État de la Prospection"
+    )
+    notes = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name="Notes de Suivi"
+    )
+    # Exemple d'attribution à un commercial, ajustez l'importation si nécessaire
+    # commercial = models.ForeignKey(
+    #     'personnel.Personnel',
+    #     on_delete=models.SET_NULL,
+    #     null=True,
+    #     blank=True,
+    #     verbose_name="Commercial Attribué"
+    # )
+
+    class Meta:
+        verbose_name = "Suivi de Prospection"
+        verbose_name_plural = "Suivis de Prospection"
+        ordering = ['-date_suivi']
+
+    def __str__(self):
+        return f"Prospection {self.etat} pour {self.entreprise.nom} le {self.date_suivi}"
