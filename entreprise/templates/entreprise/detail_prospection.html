@@ -31,7 +31,7 @@
             </p>
           </div>
           <div class="card-footer text-end">
-            <a href="{% comment %} {% url 'entreprise:modifier_entreprise' pk=entreprise.pk %} {% endcomment %}#" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit me-1"></i> {% trans "Modifier l'Entreprise" %}</a>
+            <a href="{% url 'entreprise:modifier_entreprise' pk=entreprise.pk %}" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit me-1"></i> {% trans "Modifier l'Entreprise" %}</a>
           </div>
         </div>
         <!-- Bouton de retour vers la vue de détail de l'entreprise -->
@@ -48,7 +48,8 @@
             <h5 class="mb-0"><i class="fas fa-plus-circle me-2"></i> {% trans 'Ajouter un Nouvel Événement de Suivi' %}</h5>
           </div>
           <div class="card-body">
-            <form action="#" method="post">
+            {# LIGNE 51 CORRIGÉE: L'URL doit pointer vers elle-même. Si l'erreur se produit ici, assurez-vous que la vue POST renvoie toujours l'objet 'entreprise' avec son 'pk'. #}
+            <form action="{% url 'entreprise:entreprise_prospection_detail' pk=entreprise.pk %}" method="post">
               {% csrf_token %}
 
               {% if form_suivi.non_field_errors %}
@@ -135,8 +136,11 @@
                       </td>
                       <td>{{ prospection.notes|default:'Aucune note enregistrée.' }}</td>
                       <td class="text-center">
-                        {% comment %}Ajoutez ici l'URL pour modifier ou supprimer si vous les créez plus tard{% endcomment %}
-                        <a href="#" class="btn btn-sm btn-outline-info" title="Modifier le Suivi"><i class="fas fa-edit"></i></a>
+                        <!-- Bouton Modifier -->
+                        <a href="{% url 'entreprise:modifier_prospection' pk=prospection.pk %}" class="btn btn-sm btn-outline-info" title="Modifier le Suivi"><i class="fas fa-edit"></i></a>
+
+                        <!-- Bouton Supprimer -->
+                        <a href="{% url 'entreprise:supprimer_prospection' pk=prospection.pk %}" class="btn btn-sm btn-outline-danger ms-1" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce suivi ?');" title="Supprimer le Suivi"><i class="fas fa-trash"></i></a>
                       </td>
                     </tr>
                   {% empty %}

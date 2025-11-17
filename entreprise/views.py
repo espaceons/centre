@@ -1,5 +1,12 @@
+from .forms import SuiviProspectionForm
+from .models import Entreprise, SuiviProspection
+from django.views.generic import DetailView
+from django.urls import reverse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponseRedirect
 from django.views.generic.edit import SingleObjectMixin, FormMixin
+from django.contrib import messages
+
 
 from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView, DeleteView)
@@ -148,42 +155,71 @@ class ProspectionListeView(ListView):
 
 # Modification de la vue pour supporter le formulaire d'ajout
 # <--- C'EST L'ORDRE CLASSIQUE QUI FONCTIONNE
-class EntrepriseProspectionDetailView(FormMixin, DetailView):
+
+
+class EntrepriseProspectionDetailView(DetailView):
     model = Entreprise
-    template_name = 'entreprise/detail_prospection.html'
-    context_object_name = 'entreprise'
-    form_class = SuiviProspectionForm
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        return super().get(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        form = self.get_form()
-
-        if form.is_valid():
-            return self.form_valid(form)
-        return self.form_invalid(form)
-
-    def get_success_url(self):
-        return reverse('entreprise:entreprise_prospection_detail', kwargs={'pk': self.object.pk})
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs["instance"] = SuiviProspection()
-        return kwargs
-
-    def form_valid(self, form):
-        suivi = form.save(commit=False)
-        suivi.entreprise = self.object
-        suivi.save()
-        return HttpResponseRedirect(self.get_success_url())
+    template_name = "entreprise/detail_prospection.html"
+    context_object_name = "entreprise"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["form_suivi"] = kwargs.get("form_suivi", self.get_form())
+
+        entreprise = self.get_object()
+
+        # Form vide pour l’affichage
+        context["form_suivi"] = SuiviProspectionForm()
+
+        # Liste des suivis
         context["prospections_list"] = SuiviProspection.objects.filter(
-            entreprise=self.object
+            entreprise=entreprise
         ).order_by('-date_suivi')
+
         return context
+
+    def post(self, request, *args, **kwargs):
+        entreprise = self.get_object()
+        form = SuiviProspectionForm(request.POST)
+
+        if form.is_valid():
+            suivi = form.save(commit=False)
+            suivi.entreprise = entreprise
+            suivi.save()
+
+            return redirect(
+                reverse('entreprise:entreprise_prospection_detail',
+                        kwargs={'pk': entreprise.pk})
+            )
+
+        # Si le formulaire n'est pas valide → réafficher avec erreurs
+        context = self.get_context_data()
+        context["form_suivi"] = form
+
+        return render(request, self.template_name, context)
+
+
+class SupprimerProspectionView(DeleteView):
+    model = SuiviProspection
+    template_name = "entreprise/prospection_confirm_delete.html"
+
+    def get_success_url(self):
+        return self.object.entreprise.get_absolute_url()
+
+
+class ModifierProspectionView(UpdateView):
+    model = SuiviProspection
+    form_class = SuiviProspectionForm
+    template_name = "entreprise/modifier_prospection.html"
+    context_object_name = "suivi"
+
+    def form_valid(self, form):
+        messages.success(
+            self.request, "Le suivi de prospection a été modifié avec succès.")
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        # Retour automatique vers la page de prospection de l'entreprise
+        return reverse_lazy(
+            "entreprise:entreprise_prospection_detail",
+            kwargs={"pk": self.object.entreprise.pk}
+        )

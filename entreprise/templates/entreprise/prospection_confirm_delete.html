@@ -1,0 +1,24 @@
+{% extends "base.html" %} {% block content %}
+<div class="container mt-5">
+  <div class="card border-danger shadow-lg">
+    <div class="card-header bg-danger text-white">
+      <h5><i class="fas fa-trash me-2"></i> Confirmer la suppression</h5>
+    </div>
+    <div class="card-body">
+      <p>
+        Voulez-vous vraiment supprimer ce suivi du
+        <strong>{{ object.date_suivi|date:"d/m/Y" }}</strong> ?
+      </p>
+      <form method="post">
+        {% csrf_token %}
+        <a
+          href="{{ object.entreprise.get_absolute_url }}"
+          class="btn btn-secondary"
+          >Annuler</a
+        >
+        <button type="submit" class="btn btn-danger">Supprimer</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

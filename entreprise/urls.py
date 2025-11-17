@@ -52,8 +52,13 @@ urlpatterns = [
     path('prospection/', views.ProspectionListeView.as_view(),
          name='prospection_liste'),
     # URL pour afficher la liste des prospections pour une entreprise spécifique
-    path('<int:pk>/', views.EntrepriseProspectionDetailView.as_view(),
+    path('prospection/<int:pk>/', views.EntrepriseProspectionDetailView.as_view(),
          name='entreprise_prospection_detail'),
+    path('prospection/supprimer/<int:pk>/',
+         views.SupprimerProspectionView.as_view(), name='supprimer_prospection'),
+    path('prospection/modifier/<int:pk>/',
+         views.ModifierProspectionView.as_view(), name='modifier_prospection'),
+
 
 
 
