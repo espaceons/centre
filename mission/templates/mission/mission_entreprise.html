@@ -1,0 +1,37 @@
+{% extends 'base.html' %} {% block content %}
+  <div class="container mt-5" dir="rtl">
+    <h1 class="text-center mb-4 text-primary fw-bold">{% trans 'Missions de l’Entreprise' %}: {{ entreprise.nom }}</h1>
+    <div class="table-responsive">
+      <table class="table table-hover table-striped">
+        <thead>
+          <tr>
+            <th>
+              {% trans 'Nom de la Mission' %}
+            </th>
+            <th>
+              {% trans 'Date de Départ' %}
+            </th>
+            <th>
+              {% trans 'Description' %}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for mission in missions %}
+            <tr>
+              <td>{{ mission.nom }}</td>
+              <td>{{ mission.date_depart|date:'d M Y' }}</td>
+              <td>{{ mission.description|default:'-' }}</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="3" class="text-center text-muted">
+                {% trans 'Aucune mission pour cette entreprise.' %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

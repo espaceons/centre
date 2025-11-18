@@ -58,8 +58,7 @@ urlpatterns = [
          views.SupprimerProspectionView.as_view(), name='supprimer_prospection'),
     path('prospection/modifier/<int:pk>/',
          views.ModifierProspectionView.as_view(), name='modifier_prospection'),
-
-
-
-
+    path("prospection/<int:pk>/ajouter/", views.EntrepriseProspectionAddView.as_view(),
+         name="ajouter_prospection"
+         ),
 ]

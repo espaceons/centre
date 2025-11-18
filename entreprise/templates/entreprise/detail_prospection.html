@@ -137,10 +137,10 @@
                       <td>{{ prospection.notes|default:'Aucune note enregistrée.' }}</td>
                       <td class="text-center">
                         <!-- Bouton Modifier -->
-                        <a href="{% url 'entreprise:modifier_prospection' pk=prospection.pk %}" class="btn btn-sm btn-outline-info" title="Modifier le Suivi"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'entreprise:modifier_prospection' pk=prospection.pk %}" class="btn btn-sm btn-outline-info" title="Modifier le Suivi"><i class="bi bi-pencil-square"></i></a>
 
                         <!-- Bouton Supprimer -->
-                        <a href="{% url 'entreprise:supprimer_prospection' pk=prospection.pk %}" class="btn btn-sm btn-outline-danger ms-1" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce suivi ?');" title="Supprimer le Suivi"><i class="fas fa-trash"></i></a>
+                        <a href="{% url 'entreprise:supprimer_prospection' pk=prospection.pk %}" class="btn btn-sm btn-outline-danger ms-1" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce suivi ?');" title="Supprimer le Suivi"><i class="bi bi-trash"></i></a>
                       </td>
                     </tr>
                   {% empty %}

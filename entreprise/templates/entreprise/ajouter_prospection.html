@@ -1,0 +1,15 @@
+{% extends "base.html" %} {% load i18n %} {% block content %}
+<div class="container mt-4">
+  <h2 class="text-primary fw-bold">
+    Ajouter un suivi pour : {{ entreprise.nom }}
+  </h2>
+
+  <form method="post">
+    {% csrf_token %} {{ form.as_p }}
+
+    <button class="btn btn-success">
+      <i class="bi bi-save"></i> Enregistrer
+    </button>
+  </form>
+</div>
+{% endblock %}

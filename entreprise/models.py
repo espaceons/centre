@@ -104,3 +104,13 @@ class SuiviProspection(models.Model):
 
     def __str__(self):
         return f"Prospection {self.etat} pour {self.entreprise.nom} le {self.date_suivi}"
+
+
+class Prospection(models.Model):
+    entreprise = models.ForeignKey(Entreprise, on_delete=models.CASCADE)
+    date_suivi = models.DateField(auto_now_add=True)
+    etat = models.CharField(max_length=50)
+    notes = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.entreprise.nom} - {self.etat}"

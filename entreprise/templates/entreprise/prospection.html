@@ -3,17 +3,17 @@
 {% load i18n %}
 
 {% block content %}
-  <div class="container mt-5">
-    <h1 class="text-center mb-4 text-success fw-bold"><i class="fas fa-search me-2"></i> {% trans 'Liste des Prospections de cette Entreprise' %}</h1>
+  <div class="container mt-5" dir="rtl">
+    <h1 class="text-center mb-4 text-success fw-bold"><i class="bi bi-search me-2"></i> {% trans 'Liste des Prospections de cette Entreprise' %}</h1>
 
     <div class="card shadow-lg border-0 rounded-3">
-      <div class="card-header bg-success text-white py-3">
+      <div class="card-header bg-success text-white py-3 text-end">
         <h5 class="mb-0">{% trans 'Entreprises à Prospecter' %}({{ entreprises_list.count }})</h5>
       </div>
 
       <div class="card-body p-0">
         <div class="table-responsive">
-          <table class="table table-hover table-striped mb-0">
+          <table class="table table-hover table-striped mb-0 text-end">
             <thead>
               <tr class="text-nowrap">
                 <th>
@@ -68,9 +68,8 @@
                     {% endif %}
                   </td>
                   <td class="text-center">
-                    {# Ajoutez ici des liens d'action, par exemple pour modifier l'entreprise ou ajouter un suivi de prospection #}
-                    <a href="{% url 'entreprise:update_entreprise' pk=entreprise.pk %}" class="btn btn-sm btn-outline-primary" title="Modifier"><i class="fas fa-edit"></i></a>
-                    <a href="#" class="btn btn-sm btn-outline-info ms-1" title="Voir les missions"><i class="fas fa-info-circle"></i></a>
+                    <a href="{% url 'entreprise:ajouter_prospection' pk=entreprise.pk %}" class="btn btn-sm btn-outline-success ms-1" title="{% trans 'Ajouter une Prospection' %}"><i class="bi bi-plus"></i></a>
+                    <a href="{% url 'mission:voir_missions' pk=entreprise.pk %}" class="btn btn-sm btn-outline-info ms-1" title="{% trans 'Voir les missions' %}"><i class="bi bi-info-circle"></i></a>
                   </td>
                 </tr>
               {% empty %}
@@ -86,8 +85,7 @@
       </div>
 
       <div class="card-footer text-end py-3">
-        {# Ajoutez ici le lien vers la pagination si vous en avez une #}
-        <a href="{% url 'entreprise:prospection' %}" class="btn btn-success"><i class="fas fa-plus me-2"></i> {% trans 'Ajouter une Nouvelle Prospection' %}</a>
+        {# Pagination ou autres liens peuvent être ajoutés ici #}
       </div>
     </div>
   </div>

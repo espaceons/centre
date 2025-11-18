@@ -1,0 +1,35 @@
+msgid "Liste des Prospections de cette Entreprise"
+msgstr "قائمة متابعة الشركات"
+
+msgid "Entreprises à Prospecter"
+msgstr "الشركات المراد متابعتها"
+
+msgid "Nom"
+msgstr "الاسم"
+
+msgid "Secteur d'Activité"
+msgstr "قطاع النشاط"
+
+msgid "Adresse / Délégation"
+msgstr "العنوان / التفويض"
+
+msgid "Contact Clé"
+msgstr "جهة الاتصال الرئيسية"
+
+msgid "Téléphone"
+msgstr "الهاتف"
+
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+msgid "Action"
+msgstr "إجراء"
+
+msgid "Ajouter une Prospection"
+msgstr "إضافة متابعة"
+
+msgid "Voir les missions"
+msgstr "عرض المهمات"
+
+msgid "Aucune entreprise trouvée dans la base de données."
+msgstr "لا توجد شركات في قاعدة البيانات."

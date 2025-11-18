@@ -1,5 +1,5 @@
 from .forms import SuiviProspectionForm
-from .models import Entreprise, SuiviProspection
+from .models import Entreprise, Prospection, SuiviProspection
 from django.views.generic import DetailView
 from django.urls import reverse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -129,8 +129,8 @@ class TuteurEntrepriseDeleteView(DeleteView):
 class ProspectionListeView(ListView):
     """Affiche la liste de tous les tuteurs d'entreprise."""
     model = Entreprise
-    template_name = 'entreprise/detail_prospection.html'
-    context_object_name = 'nom'
+    template_name = 'entreprise/prospection.html'
+    context_object_name = 'entreprises_list'
     ordering = ['nom']
 
 
@@ -223,3 +223,39 @@ class ModifierProspectionView(UpdateView):
             "entreprise:entreprise_prospection_detail",
             kwargs={"pk": self.object.entreprise.pk}
         )
+
+
+class EntrepriseProspectionAddView(CreateView):
+    model = SuiviProspection
+    form_class = SuiviProspectionForm
+    template_name = "entreprise/ajouter_prospection.html"
+
+    def form_valid(self, form):
+        # On récupère l'entreprise depuis l'URL
+        entreprise = get_object_or_404(Entreprise, pk=self.kwargs["pk"])
+
+        # On lie la prospection à l'entreprise avant save()
+        suivi = form.save(commit=False)
+        suivi.entreprise = entreprise
+        suivi.save()
+
+        messages.success(
+            self.request,
+            "Le suivi de prospection a été ajouté avec succès."
+        )
+
+        # Retour vers la page de prospection de cette entreprise
+        return redirect(
+            "entreprise:entreprise_prospection_detail",
+            pk=entreprise.pk
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Ajouter l'entreprise au contexte
+        context["entreprise"] = get_object_or_404(
+            Entreprise, pk=self.kwargs["pk"]
+        )
+
+        return context

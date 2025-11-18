@@ -8,7 +8,10 @@ app_name = 'mission'
 
 urlpatterns = [
 
-
+    # mission par entreprise
+    # ------------------------
+    path('<int:pk>/missions/',
+         views.EntrepriseMissionsView.as_view(), name='voir_missions'),
 
     # =======================================================
     # CRUD VISITES

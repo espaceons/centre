@@ -80,6 +80,25 @@ class VisiteListView(ListView):
     context_object_name = 'missions'  # Renommer le contexte pour plus de clarté
     # L'ordre est déjà défini dans le modèle : ['-date_depart']
 
+# mission par entreprise :
+# -------------------------
+
+
+class EntrepriseMissionsView(ListView):
+    model = Visite
+    template_name = "mission/visite_list.html"
+    context_object_name = "missions"
+
+    def get_queryset(self):
+        entreprise_pk = self.kwargs.get("pk")
+        return Visite.objects.filter(entreprise__pk=entreprise_pk).order_by('-date_depart')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['entreprise'] = Entreprise.objects.get(
+            pk=self.kwargs.get("pk"))
+        return context
+
 
 def get_filtered_entreprises(request, personnel_id):
     """

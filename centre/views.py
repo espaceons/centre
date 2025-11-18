@@ -1,7 +1,7 @@
 
 from django.views.generic import TemplateView
 
-from entreprise.models import Entreprise, TuteurEntreprise
+from entreprise.models import Entreprise, Prospection, TuteurEntreprise
 from mission.models import Visite
 from personnel.models import Personnel
 
@@ -20,6 +20,7 @@ class AccueilView(TemplateView):
         context['total_entreprises'] = Entreprise.objects.count()
         context['total_missions'] = Visite.objects.count()
         context['total_tuteurs'] = TuteurEntreprise.objects.count()
+        context['total_prospections'] = Prospection.objects.count()
 
         # Optionnel : Récupération des 5 dernières missions pour l'affichage
         context['dernieres_missions'] = Visite.objects.all().order_by(
